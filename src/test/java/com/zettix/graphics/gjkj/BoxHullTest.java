@@ -8,19 +8,10 @@ import java.util.logging.Logger;
 /**
  * Created by seanbrennan on 11/8/16.
  */
+
 public class BoxHullTest {
 
     private static final Logger LOG = Logger.getLogger(BoxHullTest.class.getName());
-
-    @org.testng.annotations.BeforeMethod
-    public void setUp() throws Exception {
-
-    }
-
-    @org.testng.annotations.AfterMethod
-    public void tearDown() throws Exception {
-
-    }
 
     @org.testng.annotations.Test
     public void testSupport() throws Exception {

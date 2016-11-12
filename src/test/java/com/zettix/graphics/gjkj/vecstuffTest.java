@@ -1,10 +1,7 @@
 package com.zettix.graphics.gjkj;
 
-import org.omg.CORBA.FloatHolder;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
 
 /**
  * Created by sean on 11/10/16.

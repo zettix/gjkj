@@ -2,8 +2,6 @@ package com.zettix.graphics.gjkj;
 
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
-
 /**
  * Created by sean on 11/11/16.
  */
@@ -15,9 +13,6 @@ public class SimplexTest {
         Hull hull = new BoxHull(size);
         M4 mover = new M4().Identity().Move(-1.0f, -1.0f, -1.0f);
         hull.UpdateTransform(mover);
-
-
-
     }
 
     @Test

@@ -1,8 +1,10 @@
 GJK Implementation in Java
 
-GJK is the Gilbert Johnson Keethiri Collision Detection Algorithm.
+Status: INCOMPLETE
+
+GJK is the Gilbert Johnson Keerthi Collision Detection Algorithm.
 In short, a clever decomposition of the dot product to see if two
-convex hulls, when combined in Minkowski sum, contain the origin.
+convex hulls, when combined in Minkowski Sum, contain the origin.
 
 Usage:
 
@@ -23,7 +25,7 @@ Do the same for hullB
 
 Now you have two hulls, hullA and hullB
 
-boolean GJKIntersect(hullA, hullB);
+boolean GJKIntersect(hullA, hullB).Intersect();
 
 And true means they are colliding.
 False means they are not.
