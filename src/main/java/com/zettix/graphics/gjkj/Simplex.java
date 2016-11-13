@@ -9,11 +9,11 @@ import java.util.logging.Logger;
  * 
  * Usage: Using a Hull
  *   progressively attempt to find if the origion is contained in Hull.
- *   by building a degree 4 simplex, tetrahedron, up from a point, line,
+ *   by building a degree 3 simplex, tetrahedron, up from a point, line,
  *   and triangle.  
  *   1) Create Hull object
  *   2) Create Simplex with Hull.
- *   2) Call bool mySimplex.Hit();
+ *   2) Call bool mySimplex.ContainsOrigin();
  */
 
 public class Simplex {
