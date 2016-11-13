@@ -16,7 +16,7 @@ public class GJKIntersectTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        V3 pointy = new V3(2.0f, 2.0f, 2.0f);
+        V3 pointy = new V3(2.0, 2.0, 2.0);
         a_hull = new TetHull(pointy);
         b_hull = new BoxHull(pointy);
     }
@@ -34,7 +34,7 @@ public class GJKIntersectTest {
 
     @Test
     public void testIntersectMove1() throws Exception {
-        M4 mover = new M4().Identity().Move(1.0f, 1.0f, 1.0f);
+        M4 mover = new M4().Identity().Move(1.0, 1.0, 1.0);
         a_hull.UpdateTransform(mover);
         a_hull.ApplyTransform();
         boolean result = new GJKIntersect(a_hull, b_hull).Intersect();
@@ -43,7 +43,7 @@ public class GJKIntersectTest {
 
     @Test
     public void testIntersectMove2() throws Exception {
-        M4 mover = new M4().Identity().Move(3.0f, 3.0f, 3.0f);
+        M4 mover = new M4().Identity().Move(3.0, 3.0, 3.0);
         a_hull.UpdateTransform(mover);
         a_hull.ApplyTransform();
         boolean result = new GJKIntersect(a_hull, b_hull).Intersect();

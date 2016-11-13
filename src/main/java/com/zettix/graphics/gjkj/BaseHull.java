@@ -12,7 +12,7 @@ public class BaseHull implements Hull {
     protected Vector<V3> corners = new Vector<>();
 
     public void ApplyTransform() {
-        Float f = 0.0f;
+        Double f = 0.0;
         for (int i = 0; i < corners.size(); i++) {
             V3 result = transform.Transform(corners.get(i));
             corners.set(i, result);
@@ -29,8 +29,8 @@ public class BaseHull implements Hull {
         // Also note that hill climbing would be an optimization.
         // TODO(sean): Add hill climbing with edge and corner graph.
         int max_i = 0;
-        Float maxdot = vecstuff.dot(direction, corners.get(0));
-        Float tmpdot;
+        Double maxdot = vecstuff.dot(direction, corners.get(0));
+        Double tmpdot;
         for (int i = 1; i < corners.size(); i++) {
             tmpdot = vecstuff.dot(direction, corners.get(i));
             if (tmpdot > maxdot) {

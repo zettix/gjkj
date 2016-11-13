@@ -37,7 +37,7 @@ public class BoxHull extends BaseHull implements Hull {
     }
 
     private void Init() {
-        V3 v = new V3(0.f, 0.f, 0.f);
+        V3 v = new V3(0., 0., 0.);
         int i;
         for (i = 0; i < 8; i++) {
             corners.add(new V3(v));
@@ -56,8 +56,8 @@ public class BoxHull extends BaseHull implements Hull {
         // Also note that hill climbing would be an optimization.
         // TODO(sean): Add hill climbing with edge and corner graph.
         int max_i = 0;
-        Float maxdot = vecstuff.dot(direction, corners.get(0));
-        Float tmpdot;
+        Double maxdot = vecstuff.dot(direction, corners.get(0));
+        Double tmpdot;
         for (int i = 1; i < corners.size(); i++) {
             tmpdot = vecstuff.dot(direction, corners.get(i));
             if (tmpdot > maxdot) {

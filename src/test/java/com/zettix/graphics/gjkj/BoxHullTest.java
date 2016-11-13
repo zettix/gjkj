@@ -17,31 +17,31 @@ public class BoxHullTest {
     public void testSupport() throws Exception {
         BoxHull boxHull;
         Vector<V3> vv = new Vector<>();
-        Float a = 0.0f;
-        Float b = 0.0f;
-        Float c = 0.0f;
-        V3 direction = new V3(1.0f, -1.0f, -1.0f);
+        Double a = 0.0;
+        Double b = 0.0;
+        Double c = 0.0;
+        V3 direction = new V3(1.0, -1.0, -1.0);
         for (int i = 0; i < 3; i++) {
             V3 f = new V3();
             V3 expected = null;
             switch (i) {
                 case 0:
-                    a = 1.0f;
-                    b = 2.0f;
-                    c = 3.0f;
-                    expected = new V3(1.0f, 0.0f, 0.0f);
+                    a = 1.0;
+                    b = 2.0;
+                    c = 3.0;
+                    expected = new V3(1.0, 0.0, 0.0);
                     break;
                 case 1:
-                    a = 2.0f;
-                    b = 3.0f;
-                    c = 4.0f;
-                    expected = new V3(2.0f, 0.0f, 0.0f);
+                    a = 2.0;
+                    b = 3.0;
+                    c = 4.0;
+                    expected = new V3(2.0, 0.0, 0.0);
                     break;
                 case 2:
-                    a = 5.0f;
-                    b = 6.0f;
-                    c = 7.0f;
-                    expected = new V3(5.0f, 0.0f, 0.0f);
+                    a = 5.0;
+                    b = 6.0;
+                    c = 7.0;
+                    expected = new V3(5.0, 0.0, 0.0);
                     break;
                 default:
                     break;
@@ -50,7 +50,7 @@ public class BoxHullTest {
             vv.add(f);
             boxHull = new BoxHull(f);
             V3 result = boxHull.Support(direction);
-            Float d = vecstuff.distanceSquared(result, expected);
+            Double d = vecstuff.distanceSquared(result, expected);
             LOG.warning("box:" + boxHull);
             LOG.warning("Input to box: " + f);
             Assert.assertTrue(d < 0.0001, "Distance: " + d + "is bad! res: " + result + "Expect: " + expected + " )))");
@@ -61,13 +61,13 @@ public class BoxHullTest {
     @org.testng.annotations.Test
     public void testApplyTransform() throws Exception {
         LOG.info("testApplyTransform.");
-        V3 v3 = new V3(10.0f, 11.0f, 12.0f);
+        V3 v3 = new V3(10.0, 11.0, 12.0);
         BoxHull boxHull = new BoxHull(v3);
-        M4 m4 = new M4().Identity().Move(1.0f, 2.0f, 3.0f);
+        M4 m4 = new M4().Identity().Move(1.0, 2.0, 3.0);
         boxHull.UpdateTransform(m4);
         boxHull.ApplyTransform();
-        V3 expected = new V3(1.0f, 13.0f, 3.0f);
-        V3 direction = new V3(-1.0f, 1.0f, -1.0f);
+        V3 expected = new V3(1.0, 13.0, 3.0);
+        V3 direction = new V3(-1.0, 1.0, -1.0);
         V3 result = boxHull.Support(direction);
                     LOG.warning("box:" + boxHull);
         LOG.info("Result: " + result);

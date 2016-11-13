@@ -79,7 +79,7 @@ public class Simplex {
         LOG.warning("INIT HULL: " + hull);
         boolean added = false;
         if (true) {
-            V3 up = new V3(0.1f, -0.1f, 1.0f);
+            V3 up = new V3(0.1f, -0.1f, 1.0);
             added = AddCheck(hull.Support(up));
         } else {
             added = AddCheck(hull.GetCorner(0));
@@ -93,7 +93,7 @@ public class Simplex {
 
     public boolean OnePlex() {
         // Makeing a line segment
-        V3 direction = new V3(vertices.get(0)).ScalarMultiply(-1.0f);
+        V3 direction = new V3(vertices.get(0)).ScalarMultiply(-1.0);
         return AddCheck(direction);
     }
 
@@ -102,12 +102,12 @@ public class Simplex {
         // Currently a 2-plex [B, A] in vertices.
         // possibilites are A, or above/below AB
         // ab = v[1] - v[0]
-        V3 a0 = new V3(vertices.get(1)).ScalarMultiply(-1.0f);  // 0 - a (from origin to a)
+        V3 a0 = new V3(vertices.get(1)).ScalarMultiply(-1.0);  // 0 - a (from origin to a)
         V3 b = vertices.get(0);
         V3 ab = vecstuff.add(b, a0);  // b - a: ab (from a to b)
-        Float ab_a0 = vecstuff.dot(ab, a0);
+        Double ab_a0 = vecstuff.dot(ab, a0);
         // Test is ab dot a0, to see if 0 is on left of a.
-        if (ab_a0 > 0.0f) {
+        if (ab_a0 > 0.0) {
             V3 direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
             return AddCheck(direction);
         }
@@ -157,7 +157,7 @@ public class Simplex {
         V3 b = vertices.get(1);
         V3 c = vertices.get(0);
         V3 direction;
-        V3 a0 = new V3(a).ScalarMultiply(-1.0f);
+        V3 a0 = new V3(a).ScalarMultiply(-1.0);
         V3 ab = vecstuff.add(b, a0);
         V3 ac = vecstuff.add(c, a0);
         V3 abc = vecstuff.cross(ab, ac);
@@ -210,7 +210,7 @@ public class Simplex {
                     vertices.add(b);
                     vertices.add(c);
                     vertices.add(a);
-                    direction = abc.ScalarMultiply(-1.0f);
+                    direction = abc.ScalarMultiply(-1.0);
                     return AddCheck(direction);
                 }
             }
@@ -248,7 +248,7 @@ public class Simplex {
         V3 c = vertices.get(1);
         V3 d = vertices.get(0);
         V3 direction;
-        V3 a0 = new V3(a).ScalarMultiply(-1.0f);
+        V3 a0 = new V3(a).ScalarMultiply(-1.0);
         V3 ab = vecstuff.add(b, a0);
         V3 ac = vecstuff.add(c, a0);
         V3 ad = vecstuff.add(d, a0);
@@ -328,7 +328,7 @@ public class Simplex {
               // 8 Probably intersecting...
               intersecting = true;
                     LOG.warning("INTERSECTING!");
-                    V3 b0 = new V3(b).ScalarMultiply(-1.0f);
+                    V3 b0 = new V3(b).ScalarMultiply(-1.0);
                     V3 bc = vecstuff.add(c, b0);
                     V3 bd = vecstuff.add(d, b0);
                     V3 bdc = vecstuff.cross(bd, bc);

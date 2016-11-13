@@ -13,20 +13,20 @@ public class SimplexTest {
     @Test
     public void testContainsOrigin() throws Exception {
 
-        V3 size = new V3(12.0f, 12.0f, 12.0f);
+        V3 size = new V3(12.0, 12.0, 12.0);
         Hull hull = new TetHull(size);
         LOG.info("tet hull: " + hull);
-        M4 mover = new M4().Identity().Move(-1.2f, -1.3f, -1.4f);
+        M4 mover = new M4().Identity().Move(-1.2, -1.3, -1.4);
         hull.UpdateTransform(mover);
         hull.ApplyTransform();
         LOG.info("hull: " + hull);
         Simplex simplex = new Simplex(hull);
         Assert.assertTrue(simplex.ContainsOrigin());
 
-        size = new V3(12.0f, 12.0f, 12.0f);
+        size = new V3(12.0, 12.0, 12.0);
         hull = new TetHull(size);
         LOG.info("tet hull: " + hull);
-        mover = new M4().Identity().Move(1.2f, 1.3f, 1.4f);
+        mover = new M4().Identity().Move(1.2, 1.3, 1.4);
         hull.UpdateTransform(mover);
         hull.ApplyTransform();
         LOG.info("hull: " + hull);
@@ -62,10 +62,10 @@ public class SimplexTest {
     @Test
     public void testThreePlex() throws Exception {
         LOG.warning("XXXXXXXXXXXX testThreePlex() XXXXXXXXXXXXXXXXXXX");
-        V3 pointy = new V3(2.0f, 2.0f, 2.0f);
+        V3 pointy = new V3(2.0, 2.0, 2.0);
         Hull hull = new TetHull(pointy);
         LOG.info("tet hull: " + hull);
-        M4 mover = new M4().Identity().Move(-1.0f, -1.0f, -1.0f);
+        M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0);
         hull.UpdateTransform(mover);
         hull.ApplyTransform();
         Simplex simplex = new Simplex(hull);

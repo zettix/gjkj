@@ -19,14 +19,14 @@ public class vecstuff {
      * @param v2 second vector
      * @return the dot product of v1 and v2
      */
-    public static Float dot(final V3 v1, final V3 v2) {
+    public static Double dot(final V3 v1, final V3 v2) {
         return (v1.get(0) * v2.get(0) +  v1.get(1) * v2.get(1)  + v1.get(2) * v2.get(2));
     }
 
-    public static Float distanceSquared(final V3 v1, final V3 v2) {
-        Float xx = v1.get(0) - v2.get(0);
-        Float yy = v1.get(1) - v2.get(1);
-        Float zz = v1.get(2) - v2.get(2);
+    public static Double distanceSquared(final V3 v1, final V3 v2) {
+        Double xx = v1.get(0) - v2.get(0);
+        Double yy = v1.get(1) - v2.get(1);
+        Double zz = v1.get(2) - v2.get(2);
         return (xx * xx + yy * yy + zz * zz);
     }
 
