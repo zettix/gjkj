@@ -23,11 +23,6 @@ public class BaseHull implements Hull {
         transform.Multiply(m4);
     }
 
-
-    private void SetCorner(int index, V3 v) {
-        corners.set(index, v);
-    }
-
     public V3 Support(V3 direction) {
         // Assume unsorted, no caching.
         // Return max(dot(corners[], direction)
