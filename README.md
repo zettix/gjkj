@@ -1,6 +1,6 @@
 # GJK Implementation in Java
 
-## Status: INCOMPLETE
+## Status: ALPHA (Expect bugs)
 
 GJK is the Gilbert Johnson Keerthi Collision Detection Algorithm.
 In short, a clever decomposition of the dot product to see if two

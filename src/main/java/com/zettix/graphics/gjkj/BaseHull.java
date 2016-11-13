@@ -56,4 +56,8 @@ public class BaseHull implements Hull {
         }
         return sb.toString();
     }
+
+    public String toOpenScad() {
+        return "Nope";
+    }
 }

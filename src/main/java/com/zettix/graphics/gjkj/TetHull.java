@@ -20,4 +20,25 @@ public class TetHull extends BaseHull implements Hull {
         LOG.warning("TET!!!!: " + this.toString());
         LOG.warning("TET SIZE: " + corners.size());
     }
+
+    @Override
+    public String toOpenScad() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("polyhedron( points=[");
+        for (Integer i = 0; i < 4; i++) {
+            V3 t = corners.get(i);
+            sb.append("[");
+            sb.append(t.get(0));
+            sb.append(",");
+            sb.append(t.get(1));
+            sb.append(",");
+            sb.append(t.get(2));
+            sb.append("]");
+            if (i != 3)
+                sb.append(",");
+            sb.append("\n");
+        }
+        sb.append("], faces = [[1,2,3],[0,2,3],[0,1,3],[0,1,2]]);\n");
+        return sb.toString();
+    }
 }

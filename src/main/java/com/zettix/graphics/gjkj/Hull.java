@@ -13,4 +13,6 @@ public interface Hull {
     void ApplyTransform();
 
     void UpdateTransform(M4 m4);
+
+    String toOpenScad();
 }
