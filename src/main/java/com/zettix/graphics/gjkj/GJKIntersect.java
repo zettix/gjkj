@@ -5,16 +5,17 @@ package com.zettix.graphics.gjkj;
  */
 public class GJKIntersect {
 
+    protected MinkowskiHull minkowskiHull;
     private Hull a, b;
 
     public GJKIntersect(Hull hullA, Hull hullB) {
         a = hullA;
         b = hullB;
+        minkowskiHull = new MinkowskiHull(a, b);
     }
 
     public boolean Intersect() {
-        return true;
+        Simplex simplex = new Simplex(minkowskiHull);
+        return simplex.ContainsOrigin();
     }
-
-
 }
