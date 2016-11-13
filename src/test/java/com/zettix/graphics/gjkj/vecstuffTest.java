@@ -35,4 +35,12 @@ public class vecstuffTest {
         Assert.assertEquals(d, expected);
     }
 
+    @Test
+    void testAdd() {
+        V3 one = new V3(1.0f, 0.0f, 3.0f);
+        V3 two = new V3(0.0f, 1.0f, 2.0f);
+        V3 out = vecstuff.add(one, two);
+        Assert.assertTrue(vecstuff.distanceSquared(out, new V3(1.0f, 1.0f, 5.0f)) < 0.0001, "too far");
+    }
+
 }

@@ -2,6 +2,8 @@ package com.zettix.graphics.gjkj;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.logging.Logger;
+
 /**
  * Created by seanbrennan on 11/9/16.
  * 
@@ -15,25 +17,70 @@ import java.util.HashSet;
  */
 
 public class Simplex {
+    private static Logger LOG = Logger.getLogger(Simplex.class.getName());
     public ArrayList<V3> vertices = new ArrayList<>();
-    boolean ContainsOrigin(){
-        return false;
-    }
     public boolean intersecting = false;
 
     private Hull hull;
 
     private HashSet<V3> seen = new HashSet<>();
 
-    public Simplex(Hull hin) {hull = hin;};
+    public Simplex(Hull hin) {
+        hull = hin;
+        boolean ok = Init();
+        if (!ok) {
+            LOG.warning("I could not even get 4 corners...");
+        }
+    }
 
     boolean SeenMe(V3 in) {
         return seen.contains(in);
     }
 
-    /////  HEY!!!!  Give me a list of corners!!
-    public void Init(final V3 in) {
-        vertices.add(new V3(in));
+    public boolean ContainsOrigin() {
+        int tries = 0;
+
+        boolean done = false;
+        while (!done) {
+            int simplex_size = vertices.size();
+            LOG.warning("ZZZZZZZ simplex size: " + simplex_size);
+            boolean added = false;
+            switch (simplex_size) {
+                case 0:
+                    added = Init();
+                    break;
+                case 1:
+                    added = OnePlex();
+                    break;
+                case 2:
+                    added = TwoPlex();
+                    break;
+                case 3:
+                    added = ThreePlex();
+                    break;
+                case 4:
+                    added = FourPlex();
+                    break;
+                default:
+                    LOG.warning("unknown simplex size: " + simplex_size);
+                    break;
+            }
+            if (!added || tries++ > 20) {
+                done = true;
+            }
+        }
+        return intersecting;
+    }
+
+    /////  HEY!!!!  Give me a list of corners!!  So I can do the SeenMe() on object references.
+    public boolean Init() {
+        LOG.warning("INIT HULL: " + hull);
+        AddCheck(hull.GetCorner(0));
+        AddCheck(hull.GetCorner(1));
+        AddCheck(hull.GetCorner(2));
+        boolean best = AddCheck(hull.GetCorner(3));
+        LOG.warning("Init simplex: " + this.toString());
+        return best;
     }
 
     public boolean OnePlex() {
@@ -63,6 +110,7 @@ public class Simplex {
 
     public boolean AddCheck(V3 supp) {
        V3 c = hull.Support(supp);
+        LOG.warning("ZZZZZ Addcheck says direction: " + supp + " -> " + c + " corner]");
        if (SeenMe(c)) {
              return false;
         }
@@ -158,7 +206,7 @@ public class Simplex {
     }
 
     public boolean FourPlex() {
-      // ..This is a tetrahedron.......C.............................
+        // ..This is a tetrahedron.......D.............................
       // ..with corners A B C D .....#.#.............................
       // ..point A is above the....##..###...........................
       // ..screen. regions     ..##....#..##.........................
@@ -168,13 +216,13 @@ public class Simplex {
       // ................##............#........##...................
       // ...............##.............6.........##..................
       // .............##...............#...........##................
-      // ..........###......ACD...(8)..#.....ABC.....##..............
-      // ........##..........3.........#......1.......##.............
+        // ..........###......ACD...(8)..#.....ADB.....##..............
+        // ........##..........2.........#......3.......##.............
       // .......##.....................#................#............
       // .....##.............#########.A7##..............##..........
       // ...##.....######5###..............####............#.........
-      // .#########.................ABD........##4#.........##.......
-      // D##############.............2.............#####......##.....
+        // .#########.................ABC........##4#.........##.......
+        // C##############.............1.............#####......##.....
       // ...............###############.................####....#....
       // ..............................##############.......####.#...
       // ............................................##############B.
@@ -189,46 +237,45 @@ public class Simplex {
         V3 d = vertices.get(0);
         V3 direction;
         V3 a0 = new V3(a).ScalarMultiply(-1.0f);
-        V3 b0 = new V3(b).ScalarMultiply(-1.0f);
-        V3 c0 = new V3(c).ScalarMultiply(-1.0f);
         V3 ab = vecstuff.add(b, a0);
         V3 ac = vecstuff.add(c, a0);
         V3 ad = vecstuff.add(d, a0);
-        V3 bc = vecstuff.add(c, b0);
-        V3 bd = vecstuff.add(d, b0);
-        V3 cd = vecstuff.add(d, c0);
         // All that to make these three:
-        V3 abc = vecstuff.cross(ab, bc);
-        V3 abd = vecstuff.cross(ab, bd);
-        V3 acd = vecstuff.cross(ac, cd);
-        boolean over_abc = vecstuff.dot(abc, a0) > 0.0;
-        boolean over_abd = vecstuff.dot(abd, a0) > 0.0;
-        boolean over_acd = vecstuff.dot(acd, a0) > 0.0;
+        V3 abc = vecstuff.cross(ab, ac);
+        V3 acd = vecstuff.cross(ac, ad);
+        V3 adb = vecstuff.cross(ad, ab);
+        boolean over_abc = vecstuff.dot(abc, a0) < 0.0;
+        boolean over_acd = vecstuff.dot(acd, a0) < 0.0;
+        boolean over_adb = vecstuff.dot(adb, a0) < 0.0;
+        // ABC | ACD | ADB
+        LOG.warning("ZZZZ TET ideas: " + over_abc + over_acd + over_adb + " ]]]");
+        LOG.warning("Simplex: " + vertices);
         if (over_abc) {
-          if (over_abd) {
-            if (over_acd) {  // 123
+            if (over_acd) {
+                if (over_adb) {  // 123
               // 7 miserable, closest to A.
               // [A] -> a0
                vertices.remove(2); // b
                vertices.remove(1); // c
                vertices.remove(0); // d
                direction = abc;
+                    LOG.warning("Misirable results.  Near A.");
                return AddCheck(direction);
             } else {        // 12x
-              // 4 over AB.
-              // [ABCD]-> [AB] -> see above.
-               vertices.remove(1); // c
+                    // 4 over AC
+                    // [ABCD]-> [AC] -> see above.
+                    vertices.remove(2); // b
                vertices.remove(0); // d
-               direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
+                    direction = vecstuff.cross(vecstuff.cross(ac, a0), ac);
                return AddCheck(direction);
             }
           } else {
-            if (over_acd) { //1x3
-              // 6 over AC
-              // [AC] -> see above/
-               vertices.remove(2); // b
+                if (over_adb) { //1x3
+                    // 6 over AB
+                    // [AB] -> see above/
+                    vertices.remove(1); // c
                vertices.remove(0); // d
-               direction = vecstuff.cross(vecstuff.cross(ac, a0), ac);
+                    direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
                return AddCheck(direction);
             } else {        // 1xx
               // 1 over ABC.
@@ -239,8 +286,8 @@ public class Simplex {
             }
           }
         } else { // x??
-          if (over_abd) { //x1?
-            if (over_acd) {  // x23
+            if (over_acd) { //x1?
+                if (over_adb) {  // x23
               // 5 AD
               // [AD] -> see above
                vertices.remove(2); // b
@@ -248,22 +295,36 @@ public class Simplex {
                direction = vecstuff.cross(vecstuff.cross(ad, a0), ad);
                return AddCheck(direction);
             } else {        // x2x
-              // 2 over ABD
-              // [ABD] -> ABD
-               vertices.remove(1); // c
-               direction = abd;
+                    // 2 over ACD
+                    // [ACD] -> ACD
+                    vertices.remove(2); // b
+                    direction = acd;
                return AddCheck(direction);
             }
           } else { // xx?
-            if (over_acd) {  // xx1
-              // 3 ACD
-              // [ACD] -> ACD
-               vertices.remove(2); // b
-               direction = acd;
-               return AddCheck(direction);
+                if (over_adb) {  // xx3
+                    // 3 ADB
+                    // [ADB] -> ADB TODO(sean) flip triangle. adb clockwise?
+                    vertices.clear();
+                    vertices.add(b);
+                    vertices.add(d);
+                    vertices.add(a); // now adb
+                    direction = adb;
+                    return AddCheck(direction);
             } else {        // xxx
               // 8 Probably intersecting...
               intersecting = true;
+                    LOG.warning("INTERSECTING!");
+                    V3 b0 = new V3(b).ScalarMultiply(-1.0f);
+                    V3 bc = vecstuff.add(c, b0);
+                    V3 bd = vecstuff.add(d, b0);
+                    V3 bcd = vecstuff.cross(bc, bd);
+                    boolean over_bcd = vecstuff.dot(bcd, a0) > 0.0;
+                    if (over_bcd) {
+                        LOG.warning("Intersection says YES!!!!");
+                    } else {
+                        LOG.warning("Intersection says NOOOOOOOOOOOOO!!!!");
+                    }
               return false;
             }
           }

@@ -76,6 +76,8 @@ public class M4Test {
                         0.0f, 0.0f, 0.0f, 1.0f};
         M4 m = new M4();
         m.Identity();
+        M4 mm = new M4(m);
+        m.Multiply(mm);
         for (int i = 0; i < 16; i++) {
             LOG.info("Asserting element " + i);
             Assert.assertEquals(expected[i], m.get(i), "Element: " + i);

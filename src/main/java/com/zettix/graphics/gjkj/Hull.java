@@ -5,7 +5,12 @@ package com.zettix.graphics.gjkj;
  */
 
 public interface Hull {
-    public M4 transform = null;
+    M4 transform = null;
     V3 Support(V3 direction);
-    public void UpdateTransform(M4 m4);
+
+    V3 GetCorner(int index);
+
+    void ApplyTransform();
+
+    void UpdateTransform(M4 m4);
 }
