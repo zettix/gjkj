@@ -18,12 +18,10 @@ import java.util.logging.Logger;
 
 public class Simplex {
     private static Logger LOG = Logger.getLogger(Simplex.class.getName());
-    public ArrayList<V3> vertices = new ArrayList<>();
     public boolean intersecting = false;
-
+    protected ArrayList<V3> vertices = new ArrayList<>();
+    protected HashSet<V3> seen = new HashSet<>();
     private Hull hull;
-
-    private HashSet<V3> seen = new HashSet<>();
 
     public Simplex(Hull hin) {
         hull = hin;
@@ -34,6 +32,10 @@ public class Simplex {
     }
 
     boolean SeenMe(V3 in) {
+        boolean seen_it = seen.contains(in);
+        if (seen_it) {
+            LOG.warning("Already Saw This One!!!!!!!!!!!!!!!!" + in + " SIMPLEX FAILURE ABORT ABORT ABORT!" + seen);
+        }
         return seen.contains(in);
     }
 
@@ -43,7 +45,7 @@ public class Simplex {
         boolean done = false;
         while (!done) {
             int simplex_size = vertices.size();
-            LOG.warning("ZZZZZZZ simplex size: " + simplex_size);
+            LOG.warning("ZZZZZZZ  CONTAINS ORIGIN OUTER LOOP **************** simplex size: " + simplex_size);
             boolean added = false;
             switch (simplex_size) {
                 case 0:
@@ -75,12 +77,18 @@ public class Simplex {
     /////  HEY!!!!  Give me a list of corners!!  So I can do the SeenMe() on object references.
     public boolean Init() {
         LOG.warning("INIT HULL: " + hull);
-        AddCheck(hull.GetCorner(0));
-        AddCheck(hull.GetCorner(1));
-        AddCheck(hull.GetCorner(2));
-        boolean best = AddCheck(hull.GetCorner(3));
+        boolean added = false;
+        if (true) {
+            V3 up = new V3(0.1f, -0.1f, 1.0f);
+            added = AddCheck(hull.Support(up));
+        } else {
+            added = AddCheck(hull.GetCorner(0));
+            added = added && AddCheck(hull.GetCorner(1));
+            added = added && AddCheck(hull.GetCorner(2));
+            added = added && AddCheck(hull.GetCorner(3));
+        }
         LOG.warning("Init simplex: " + this.toString());
-        return best;
+        return added;
     }
 
     public boolean OnePlex() {
@@ -198,6 +206,10 @@ public class Simplex {
                     return AddCheck(direction);
                 } else {
                     // 3 [A, C, B] supp-> -abc
+                    vertices.clear();
+                    vertices.add(b);
+                    vertices.add(c);
+                    vertices.add(a);
                     direction = abc.ScalarMultiply(-1.0f);
                     return AddCheck(direction);
                 }
@@ -244,11 +256,12 @@ public class Simplex {
         V3 abc = vecstuff.cross(ab, ac);
         V3 acd = vecstuff.cross(ac, ad);
         V3 adb = vecstuff.cross(ad, ab);
-        boolean over_abc = vecstuff.dot(abc, a0) < 0.0;
-        boolean over_acd = vecstuff.dot(acd, a0) < 0.0;
-        boolean over_adb = vecstuff.dot(adb, a0) < 0.0;
+        boolean over_abc = vecstuff.dot(abc, a0) > 0.0;
+        boolean over_acd = vecstuff.dot(acd, a0) > 0.0;
+        boolean over_adb = vecstuff.dot(adb, a0) > 0.0;
         // ABC | ACD | ADB
         LOG.warning("ZZZZ TET ideas: " + over_abc + over_acd + over_adb + " ]]]");
+        LOG.warning("ZZZZ TET a:" + a + " b:" + b + " c:" + c + " d:" + d);
         LOG.warning("Simplex: " + vertices);
         if (over_abc) {
             if (over_acd) {
@@ -318,9 +331,9 @@ public class Simplex {
                     V3 b0 = new V3(b).ScalarMultiply(-1.0f);
                     V3 bc = vecstuff.add(c, b0);
                     V3 bd = vecstuff.add(d, b0);
-                    V3 bcd = vecstuff.cross(bc, bd);
-                    boolean over_bcd = vecstuff.dot(bcd, a0) > 0.0;
-                    if (over_bcd) {
+                    V3 bdc = vecstuff.cross(bd, bc);
+                    boolean over_bdc = vecstuff.dot(bdc, a0) > 0.0;
+                    if (over_bdc) {
                         LOG.warning("Intersection says YES!!!!");
                     } else {
                         LOG.warning("Intersection says NOOOOOOOOOOOOO!!!!");

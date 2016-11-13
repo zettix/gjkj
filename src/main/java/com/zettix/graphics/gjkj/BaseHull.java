@@ -44,7 +44,7 @@ public class BaseHull implements Hull {
             }
         }
         V3 result = corners.get(max_i);
-        LOG.warning("Support corner: " + result);
+        LOG.warning("Support [dir:" + direction + "] corner: " + result);
         return result;
     }
 

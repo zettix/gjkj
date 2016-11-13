@@ -22,6 +22,16 @@ public class SimplexTest {
         LOG.info("hull: " + hull);
         Simplex simplex = new Simplex(hull);
         Assert.assertTrue(simplex.ContainsOrigin());
+
+        size = new V3(12.0f, 12.0f, 12.0f);
+        hull = new TetHull(size);
+        LOG.info("tet hull: " + hull);
+        mover = new M4().Identity().Move(1.2f, 1.3f, 1.4f);
+        hull.UpdateTransform(mover);
+        hull.ApplyTransform();
+        LOG.info("hull: " + hull);
+        simplex = new Simplex(hull);
+        Assert.assertFalse(simplex.ContainsOrigin());
     }
 
     @Test
@@ -51,7 +61,25 @@ public class SimplexTest {
 
     @Test
     public void testThreePlex() throws Exception {
-
+        LOG.warning("XXXXXXXXXXXX testThreePlex() XXXXXXXXXXXXXXXXXXX");
+        V3 pointy = new V3(2.0f, 2.0f, 2.0f);
+        Hull hull = new TetHull(pointy);
+        LOG.info("tet hull: " + hull);
+        M4 mover = new M4().Identity().Move(-1.0f, -1.0f, -1.0f);
+        hull.UpdateTransform(mover);
+        hull.ApplyTransform();
+        Simplex simplex = new Simplex(hull);
+        simplex.vertices.clear();
+        simplex.seen.clear();
+        for (int i = 0; i < 3; i++) {
+            V3 corner = hull.GetCorner(i);
+            simplex.vertices.add(corner);
+            simplex.seen.add(corner);
+        }
+        LOG.warning("SIMPLEX: " + simplex);
+        LOG.warning("YYYYYYYYYYYYYYYY About to TEST YYYYYYYYYYYYYYY");
+        boolean result = simplex.ThreePlex();
+        Assert.assertTrue(result);
     }
 
     @Test
