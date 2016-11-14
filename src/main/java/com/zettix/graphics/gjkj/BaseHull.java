@@ -1,13 +1,12 @@
 package com.zettix.graphics.gjkj;
 
 import java.util.Vector;
-import java.util.logging.Logger;
 
 /**
  * Created by sean on 11/12/16.
  */
 public class BaseHull implements Hull {
-    private final Logger LOG = Logger.getLogger(BoxHull.class.getName());
+    // private final Logger LOG = Logger.getLogger(BoxHull.class.getName());
     public M4 transform = new M4().Identity();
     protected Vector<V3> corners = new Vector<>();
 
@@ -39,7 +38,7 @@ public class BaseHull implements Hull {
             }
         }
         V3 result = corners.get(max_i);
-        LOG.warning("Support [dir:" + direction + "] corner: " + result);
+        // LOG.warning("Support [dir:" + direction + "] corner: " + result);
         return result;
     }
 

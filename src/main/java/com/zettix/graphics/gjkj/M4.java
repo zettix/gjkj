@@ -1,14 +1,13 @@
 package com.zettix.graphics.gjkj;
 
 import java.util.Vector;
-import java.util.logging.Logger;
 
 /**
  * Created by seanbrennan on 11/9/16.
  */
 public class M4 extends Vector<Double> {
 
-    public static final Logger LOG = Logger.getLogger(M4.class.getName());
+    // public static final Logger LOG = Logger.getLogger(M4.class.getName());
     public M4() {
         super(16);
         Init();

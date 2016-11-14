@@ -2,7 +2,6 @@ package com.zettix.graphics.gjkj;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.logging.Logger;
 
 /**
  * Created by seanbrennan on 11/9/16.
@@ -19,7 +18,7 @@ import java.util.logging.Logger;
 public class Simplex {
     private static final V3 ZERO = new V3(0.0, 0.0, 0.0);
     private static final double CLOSE = 0.0000001;
-    private static Logger LOG = Logger.getLogger(Simplex.class.getName());
+    // // private static Logger LOG = Logger.getLogger(Simplex.class.getName());
     public boolean intersecting = false;
     protected ArrayList<V3> vertices = new ArrayList<>();
     protected HashSet<V3> seen = new HashSet<>();
@@ -29,18 +28,18 @@ public class Simplex {
         hull = hin;
         boolean ok = Init();
         if (!ok) {
-            LOG.warning("I could not even get 4 corners...");
+            // LOG.warning("I could not even get 4 corners...");
         }
     }
 
     boolean SeenMe(V3 in) {
         boolean seen_it = seen.contains(in);
         if (seen_it) {
-            LOG.warning("Already Saw This One!!!!!!!!!!!!!!!!" + in + " SIMPLEX FAILURE ABORT ABORT ABORT!" + seen);
+            // LOG.warning("Already Saw This One!!!!!!!!!!!!!!!!" + in + " SIMPLEX FAILURE ABORT ABORT ABORT!" + seen);
         }
         if (vecstuff.distanceSquared(in, ZERO) < CLOSE) {
             intersecting = true;
-            LOG.warning("A was actually close to the origin!");
+            // LOG.warning("A was actually close to the origin!");
             return false;
         }
         return seen.contains(in);
@@ -52,7 +51,7 @@ public class Simplex {
         boolean done = false;
         while (!done) {
             int simplex_size = vertices.size();
-            LOG.warning("ZZZZZZZ  CONTAINS ORIGIN OUTER LOOP **************** simplex size: " + simplex_size + "S:" + toString());
+            // LOG.warning("ZZZZZZZ  CONTAINS ORIGIN OUTER LOOP **************** simplex size: " + simplex_size + "S:" + toString());
             boolean added = false;
             switch (simplex_size) {
                 case 0:
@@ -71,7 +70,7 @@ public class Simplex {
                     added = FourPlex();
                     break;
                 default:
-                    LOG.warning("unknown simplex size: " + simplex_size);
+                    // LOG.warning("unknown simplex size: " + simplex_size);
                     break;
             }
             if (!added || tries++ > 20) {
@@ -83,20 +82,20 @@ public class Simplex {
 
     /////  HEY!!!!  Give me a list of corners!!  So I can do the SeenMe() on object references.
     public boolean Init() {
-        LOG.warning("INIT HULL: " + hull);
+        // LOG.warning("INIT HULL: " + hull);
         boolean added = false;
-        LOG.warning("NOTHING HAPPENED YET!");
+        // LOG.warning("NOTHING HAPPENED YET!");
         if (true) {
             V3 up = new V3(0.1f, -0.1f, 1.0);
             added = AddCheck(up);
-            LOG.warning("OMG HOW MANY SUPPORTS??");
+            // LOG.warning("OMG HOW MANY SUPPORTS??");
         } else {
             added = AddCheck(hull.GetCorner(0));
             added = added && AddCheck(hull.GetCorner(1));
             added = added && AddCheck(hull.GetCorner(2));
             added = added && AddCheck(hull.GetCorner(3));
         }
-        LOG.warning("Init simplex: " + this.toString());
+        // LOG.warning("Init simplex: " + this.toString());
         return added;
     }
 
@@ -127,7 +126,7 @@ public class Simplex {
 
     public boolean AddCheck(V3 supp) {
        V3 c = hull.Support(supp);
-        LOG.warning("ZZZZZ Addcheck says direction: " + supp + " -> " + c + " corner]");
+        // LOG.warning("ZZZZZ Addcheck says direction: " + supp + " -> " + c + " corner]");
        if (SeenMe(c)) {
              return false;
         }
@@ -269,9 +268,9 @@ public class Simplex {
         boolean over_acd = vecstuff.dot(acd, a0) > 0.0;
         boolean over_adb = vecstuff.dot(adb, a0) > 0.0;
         // ABC | ACD | ADB
-        LOG.warning("ZZZZ TET ideas: " + over_abc + over_acd + over_adb + " ]]]");
-        LOG.warning("ZZZZ TET a:" + a + " b:" + b + " c:" + c + " d:" + d);
-        LOG.warning("Simplex: " + vertices);
+        // LOG.warning("ZZZZ TET ideas: " + over_abc + over_acd + over_adb + " ]]]");
+        // LOG.warning("ZZZZ TET a:" + a + " b:" + b + " c:" + c + " d:" + d);
+        // LOG.warning("Simplex: " + vertices);
         if (over_abc) {
             if (over_acd) {
                 if (over_adb) {  // 123
@@ -281,7 +280,7 @@ public class Simplex {
                vertices.remove(1); // c
                vertices.remove(0); // d
                direction = abc;
-                    LOG.warning("Misirable results.  Near A.");
+                    // LOG.warning("Misirable results.  Near A.");
                return AddCheck(direction);
             } else {        // 12x
                     // 4 over AC
@@ -336,16 +335,16 @@ public class Simplex {
             } else {        // xxx
               // 8 Probably intersecting...
               intersecting = true;
-                    LOG.warning("INTERSECTING!");
+                    // LOG.warning("INTERSECTING!");
                     V3 b0 = new V3(b).ScalarMultiply(-1.0);
                     V3 bc = vecstuff.add(c, b0);
                     V3 bd = vecstuff.add(d, b0);
                     V3 bdc = vecstuff.cross(bd, bc);
                     boolean over_bdc = vecstuff.dot(bdc, a0) > 0.0;
                     if (over_bdc) {
-                        LOG.warning("Intersection says YES!!!!");
+                        // LOG.warning("Intersection says YES!!!!");
                     } else {
-                        LOG.warning("Intersection says NOOOOOOOOOOOOO!!!!");
+                        // LOG.warning("Intersection says NOOOOOOOOOOOOO!!!!");
                     }
               return false;
             }

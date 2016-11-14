@@ -2,7 +2,6 @@ package com.zettix.graphics.gjkj;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Created by seanbrennan on 11/8/16.
@@ -16,14 +15,14 @@ import java.util.logging.Logger;
  */
 
 public class BoxHull extends BaseHull implements Hull {
-    private final Logger LOG = Logger.getLogger(BoxHull.class.getName());
+    // private final Logger LOG = Logger.getLogger(BoxHull.class.getName());
     public M4 transform = new M4().Identity();
 
     public BoxHull() throws Exception{
         throw new Exception("No empty boxes!");
     }
 
-    public BoxHull(V3 dimensions) {
+    public BoxHull(final V3 dimensions) {
         int info_len = dimensions.size();
         int corner_index = 0;
         Init();
@@ -44,7 +43,7 @@ public class BoxHull extends BaseHull implements Hull {
         for (i = 0; i < 8; i++) {
             corners.add(new V3(v));
         }
-        LOG.warning("Corner size: " + corners.size());
+        // LOG.warning("Corner size: " + corners.size());
     }
 
     private void SetCorner(int idx, V3 p) {
@@ -68,7 +67,7 @@ public class BoxHull extends BaseHull implements Hull {
             }
         }
         V3 result = corners.get(max_i);
-        LOG.warning("Support box [Direction: " + direction + "] corner: " + result);
+        // LOG.warning("Support box [Direction: " + direction + "] corner: " + result);
         //LOG.warning(toString());
         return result;
     }
@@ -100,6 +99,7 @@ public class BoxHull extends BaseHull implements Hull {
         perm.put(6, 7);
 
         StringBuilder sb = new StringBuilder();
+        sb.append("module A() {\n");
         sb.append("CubePoints = [\n");
         for (Integer i = 0; i < 8; i++) {
             V3 t = corners.get(perm.get(i));
@@ -123,6 +123,7 @@ public class BoxHull extends BaseHull implements Hull {
         sb.append("[6,7,3,2],  // back\n");
         sb.append("[7,4,0,3]]; // left\n");
         sb.append("polyhedron( CubePoints, CubeFaces );\n");
+        sb.append("}\n");
         return sb.toString();
     }
 }
