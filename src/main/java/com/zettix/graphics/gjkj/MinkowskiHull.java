@@ -14,8 +14,9 @@ public class MinkowskiHull extends BaseHull implements Hull {
 
     @Override
     public V3 Support(V3 direction) {  // a(dir) - b(-dir)
-        V3 result = vecstuff.add(a.Support(direction),
-                b.Support(new V3(direction).ScalarMultiply(-1.0)).ScalarMultiply(-1.0));
+        V3 d2 = new V3(direction).ScalarMultiply(-1.0);
+        V3 tmp = new V3(b.Support(d2)).ScalarMultiply(-1.0);
+        V3 result = vecstuff.add(a.Support(direction), tmp);
         return result;
     }
 }

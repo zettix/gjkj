@@ -6,16 +6,18 @@ package com.zettix.graphics.gjkj;
 public class GJKIntersect {
 
     protected MinkowskiHull minkowskiHull;
+    protected Simplex simplex;
     private Hull a, b;
 
     public GJKIntersect(Hull hullA, Hull hullB) {
         a = hullA;
         b = hullB;
+
         minkowskiHull = new MinkowskiHull(a, b);
     }
 
     public boolean Intersect() {
-        Simplex simplex = new Simplex(minkowskiHull);
+        simplex = new Simplex(minkowskiHull);
         return simplex.ContainsOrigin();
     }
 }

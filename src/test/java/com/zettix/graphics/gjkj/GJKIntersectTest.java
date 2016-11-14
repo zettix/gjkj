@@ -56,10 +56,16 @@ public class GJKIntersectTest {
     public void testIntersectMove3() throws Exception {
         Double f45 = Math.PI / 4.0;
         // This one is the real deal, rotate a cube and have edges cross...
-        M4 mover = new M4().Identity().Move(-1.8, -1.8, -1.8).Rotate(f45, 0.0, f45);
+        M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(f45, 0.0, f45);
         b_hull.UpdateTransform(mover);
         b_hull.ApplyTransform();
-        boolean result = new GJKIntersect(a_hull, b_hull).Intersect();
+        GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
+        boolean result = gjk.Intersect();
+
+        LOG.warning(b_hull.toOpenScad());
+        LOG.warning(a_hull.toOpenScad());
+        LOG.warning(gjk.simplex.toOpenScad());
+
         Assert.assertTrue(result);
     }
 
@@ -73,7 +79,10 @@ public class GJKIntersectTest {
         LOG.warning("BHULL: " + b_hull);
         LOG.warning(b_hull.toOpenScad());
         LOG.warning(a_hull.toOpenScad());
-        boolean result = new GJKIntersect(a_hull, b_hull).Intersect();
+        GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
+        boolean result = gjk.Intersect();
+        LOG.warning("SIMPLEX MODEL: ");
+        LOG.warning(gjk.simplex.toOpenScad());
         Assert.assertFalse(result);
     }
 }

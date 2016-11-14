@@ -69,6 +69,7 @@ public class BoxHull extends BaseHull implements Hull {
         }
         V3 result = corners.get(max_i);
         LOG.warning("Support box [Direction: " + direction + "] corner: " + result);
+        //LOG.warning(toString());
         return result;
     }
 

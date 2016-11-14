@@ -17,6 +17,8 @@ import java.util.logging.Logger;
  */
 
 public class Simplex {
+    private static final V3 ZERO = new V3(0.0, 0.0, 0.0);
+    private static final double CLOSE = 0.0000001;
     private static Logger LOG = Logger.getLogger(Simplex.class.getName());
     public boolean intersecting = false;
     protected ArrayList<V3> vertices = new ArrayList<>();
@@ -36,6 +38,11 @@ public class Simplex {
         if (seen_it) {
             LOG.warning("Already Saw This One!!!!!!!!!!!!!!!!" + in + " SIMPLEX FAILURE ABORT ABORT ABORT!" + seen);
         }
+        if (vecstuff.distanceSquared(in, ZERO) < CLOSE) {
+            intersecting = true;
+            LOG.warning("A was actually close to the origin!");
+            return false;
+        }
         return seen.contains(in);
     }
 
@@ -45,7 +52,7 @@ public class Simplex {
         boolean done = false;
         while (!done) {
             int simplex_size = vertices.size();
-            LOG.warning("ZZZZZZZ  CONTAINS ORIGIN OUTER LOOP **************** simplex size: " + simplex_size);
+            LOG.warning("ZZZZZZZ  CONTAINS ORIGIN OUTER LOOP **************** simplex size: " + simplex_size + "S:" + toString());
             boolean added = false;
             switch (simplex_size) {
                 case 0:
@@ -78,9 +85,11 @@ public class Simplex {
     public boolean Init() {
         LOG.warning("INIT HULL: " + hull);
         boolean added = false;
+        LOG.warning("NOTHING HAPPENED YET!");
         if (true) {
             V3 up = new V3(0.1f, -0.1f, 1.0);
-            added = AddCheck(hull.Support(up));
+            added = AddCheck(up);
+            LOG.warning("OMG HOW MANY SUPPORTS??");
         } else {
             added = AddCheck(hull.GetCorner(0));
             added = added && AddCheck(hull.GetCorner(1));
@@ -358,6 +367,28 @@ public class Simplex {
       sb.append("]>");
       return sb.toString();
    }
+
+    public String toOpenScad() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("module Simplex_points() {\n");
+        sb.append("color(\"yellow\") polyhedron( points=[");
+        for (Integer i = 0; i < vertices.size(); i++) {
+            V3 t = vertices.get(i);
+            sb.append("[");
+            sb.append(t.get(0));
+            sb.append(",");
+            sb.append(t.get(1));
+            sb.append(",");
+            sb.append(t.get(2));
+            sb.append("]");
+            if (i != 3)
+                sb.append(",");
+            sb.append("\n");
+        }
+        sb.append("], faces = [[1,2,3],[0,2,3],[0,1,3],[0,1,2]]);\n");
+        sb.append("}\n");
+        return sb.toString();
+    }
 
 }
 
