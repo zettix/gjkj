@@ -66,6 +66,7 @@ public class CapsuleHull extends BaseHull implements Hull {
     @Override
     public V3 Support(V3 direction) {
         V3 far = new V3(direction);
+        // This is wrong.  If r1 != r2 the dot should be to the angle of the cone.  Cannot get direction w/o unitizing....
         if (vecstuff.dot(direction, from_c1_to_c2) > 0.0) {
             far.ScalarMultiply(r2 / Math.sqrt(vecstuff.dot(direction, direction)));
             return vecstuff.add(c2, far);
