@@ -45,6 +45,7 @@ Actual distance is a harder problem.
    Hull is the interface, you override Support() and anything else in BaseHull() which has convenent defaults.
 
 ## Testing Environment:
-  Uses TestNG framework.
+  Uses TestNG framework.  OpenScad to visualize some results.
+  ![animated collision test](https://github.com/zettix/gjkj/blob/master/resources/collision_test_icecream.gif)
 
 ### Author: Sean Brennan, 2016
