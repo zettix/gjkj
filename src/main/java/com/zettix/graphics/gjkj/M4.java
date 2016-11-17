@@ -64,14 +64,14 @@ public class M4 extends Vector<Double> {
         Double x = 0.0;
         for (i = 0; i < 3; i++) {
             k = this.get(12 + i) * in.get(i);  // da db dc
-            x += k;
+            x += k * k;
         }
         k = this.get(15);
-        x += k;
+        x += k * k;
         Double xx = 1.0 - x;
         if ( xx * xx > 0.001) {
             for (i = 0; i < 3; i++)
-                c.set(i, c.get(i) / x);
+                c.set(i, c.get(i) / Math.sqrt(x));  // w must be 1 for V3.
         }
         return c;
     }

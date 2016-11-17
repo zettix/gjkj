@@ -33,4 +33,41 @@ public class vecstuff {
     public static V3 add(final V3 v1, final V3 v2) {
         return new V3(v1.get(0) + v2.get(0), v1.get(1) + v2.get(1), v1.get(2) + v2.get(2));
     }
+
+    public static boolean HitOrigin(final V3 start, final V3 direction) {
+        // Given line from start to target, find if origin was hit.
+        //
+        // p = t * direction + start.  p should be zero, 0=<t<=1
+        // therefore 0 = t * dir + start
+        double d1 = direction.get(0);
+        double d2 = direction.get(1);
+        double d3 = direction.get(2);
+        d1 *= d1;
+        d2 *= d2;
+        d3 *= d3;
+        double t = 0.0;
+        double max = 0.0;
+        double div = 1.0;
+
+        if (d1 > max) {
+            t = -start.get(0);
+            div = direction.get(0);
+            max = d1;
+        }
+        if (d2 > max) {
+            t = -start.get(1);
+            div = direction.get(1);
+            max = d2;
+        }
+        if (d3 > max) {
+            t = -start.get(2);
+            div = direction.get(2);
+        }
+        t /= div;
+        if ((t > 1.0001) || (t <= 0.0001)) {
+            return false;
+        }
+        V3 testPoint = vecstuff.add(new V3(direction).ScalarMultiply(t), start);
+        return vecstuff.dot(testPoint, testPoint) <= 0.0001;
+    }
 }

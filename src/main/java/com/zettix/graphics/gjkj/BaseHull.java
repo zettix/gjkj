@@ -18,10 +18,12 @@ public class BaseHull implements Hull {
         }
     }
 
+    @Override
     public void UpdateTransform(M4 m4) {
         transform.Multiply(m4);
     }
 
+    @Override
     public V3 Support(V3 direction) {
         // Assume unsorted, no caching.
         // Return max(dot(corners[], direction)
@@ -42,10 +44,12 @@ public class BaseHull implements Hull {
         return result;
     }
 
+    @Override
     public V3 GetCorner(int index) {
         return corners.get(index);
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < corners.size(); i++) {
@@ -56,7 +60,8 @@ public class BaseHull implements Hull {
         return sb.toString();
     }
 
-    public String toOpenScad() {
+    @Override
+    public String toOpenScad(String module_name, boolean Hit) {
         return "Nope";
     }
 }

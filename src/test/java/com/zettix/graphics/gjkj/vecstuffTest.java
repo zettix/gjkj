@@ -43,4 +43,31 @@ public class vecstuffTest {
         Assert.assertTrue(vecstuff.distanceSquared(out, new V3(1.0, 1.0, 5.0)) < 0.0001, "too far");
     }
 
+
+    @Test
+    public void testHitOrigin() {
+        V3 start = new V3(-1.0, -1.0, -1.0);
+        V3 direction = new V3(2.0, 2.0, 2.0);
+        Assert.assertTrue(vecstuff.HitOrigin(start, direction));
+
+        start = new V3(1.0, 1.0, 1.0);
+        direction = new V3(2.0, 2.0, 2.0);
+        Assert.assertFalse(vecstuff.HitOrigin(start, direction));
+
+        start = new V3(-1.0, -1.0, -1.5);
+        direction = new V3(2.0, 2.0, 2.0);
+        Assert.assertFalse(vecstuff.HitOrigin(start, direction));
+
+        start = new V3(-1.0, -1.0, -1.0);
+        direction = new V3(2.0, 2.1, 2.0);
+        Assert.assertFalse(vecstuff.HitOrigin(start, direction));
+
+        start = new V3(-1.0, -1.0, -1.0);
+        direction = new V3(2.0, 2.0, 2.1);
+        Assert.assertFalse(vecstuff.HitOrigin(start, direction));
+
+        start = new V3(-0.19802951148834433, 0.19802951148834433, -1.980295085374747);
+        direction = new V3(0.19802951148834433, -0.19802951148834433, 1.980295085374747);
+        Assert.assertTrue(vecstuff.HitOrigin(start, direction));
+    }
 }

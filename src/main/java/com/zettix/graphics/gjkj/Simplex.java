@@ -87,13 +87,8 @@ public class Simplex {
         // LOG.warning("NOTHING HAPPENED YET!");
         if (true) {
             V3 up = new V3(0.1f, -0.1f, 1.0);
-            added = AddCheck(up);
+            added = AddCheck(null, null, up);
             // LOG.warning("OMG HOW MANY SUPPORTS??");
-        } else {
-            added = AddCheck(hull.GetCorner(0));
-            added = added && AddCheck(hull.GetCorner(1));
-            added = added && AddCheck(hull.GetCorner(2));
-            added = added && AddCheck(hull.GetCorner(3));
         }
         // LOG.warning("Init simplex: " + this.toString());
         return added;
@@ -101,8 +96,9 @@ public class Simplex {
 
     public boolean OnePlex() {
         // Makeing a line segment
-        V3 direction = new V3(vertices.get(0)).ScalarMultiply(-1.0);
-        return AddCheck(direction);
+        V3 a = vertices.get(0);
+        V3 direction = new V3(a).ScalarMultiply(-1.0);
+        return AddCheck(null, null, direction);
     }
 
     public boolean TwoPlex() {
@@ -110,22 +106,34 @@ public class Simplex {
         // Currently a 2-plex [B, A] in vertices.
         // possibilites are A, or above/below AB
         // ab = v[1] - v[0]
-        V3 a0 = new V3(vertices.get(1)).ScalarMultiply(-1.0);  // 0 - a (from origin to a)
+        V3 a = vertices.get(1);
+        V3 a0 = new V3(a).ScalarMultiply(-1.0);  // 0 - a (from origin to a)
         V3 b = vertices.get(0);
         V3 ab = vecstuff.add(b, a0);  // b - a: ab (from a to b)
         Double ab_a0 = vecstuff.dot(ab, a0);
         // Test is ab dot a0, to see if 0 is on left of a.
         if (ab_a0 > 0.0) {
             V3 direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
-            return AddCheck(direction);
+            return AddCheck(a, ab, direction);
         }
         // a is closest so go in direction of 0.
         vertices.remove(0);
-        return AddCheck(a0);
+        return AddCheck(a, ab, a0);
     }
 
-    public boolean AddCheck(V3 supp) {
-       V3 c = hull.Support(supp);
+    public boolean OriginOnLineCheck(V3 start, V3 direction) {
+        if (vecstuff.HitOrigin(start, direction)) {
+            intersecting = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean AddCheck(V3 start, V3 ab, V3 support_direction) {
+        if (start != null && ab != null && OriginOnLineCheck(start, ab)) {
+            return false;
+        }
+        V3 c = hull.Support(support_direction);
         // LOG.warning("ZZZZZ Addcheck says direction: " + supp + " -> " + c + " corner]");
        if (SeenMe(c)) {
              return false;
@@ -176,20 +184,20 @@ public class Simplex {
             // [A, C] : supp->ACxA0xAC
             vertices.remove(1);
             direction = vecstuff.cross(vecstuff.cross(ac, a0), ac);
-            return AddCheck(direction);
+              return AddCheck(a, ab, direction);
           } else {
             if (vecstuff.dot(ab, a0) > 0.0) {  // STAR FACTOR
                // 4  [A, B] supp->ABxA0xAB
                vertices.remove(0);
                direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
-               return AddCheck(direction);
+                return AddCheck(a, ab, direction);
             } else {
                // 5 closest to A.  bummer.
                // [A] : supp->A0
                vertices.remove(1);
                vertices.remove(0);
                direction = a0;
-               return AddCheck(direction);
+                return AddCheck(a, ab, direction);
             }
           }
         } else {
@@ -198,20 +206,20 @@ public class Simplex {
                     // 4  [A, B] supp->ABxA0xAB
                     vertices.remove(0);
                     direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
-                    return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
                 } else {
                     // 5 closest to A.  bummer.
                     // [A] : supp->A0
                     vertices.remove(1);
                     vertices.remove(0);
                     direction = a0;
-                    return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
                 }
             } else {
                 if (vecstuff.dot(abc, a0) > 0.0) {
                     // 2 [A, B, C] supp -> abc
                     direction = abc;
-                    return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
                 } else {
                     // 3 [A, C, B] supp-> -abc
                     vertices.clear();
@@ -219,7 +227,7 @@ public class Simplex {
                     vertices.add(c);
                     vertices.add(a);
                     direction = abc.ScalarMultiply(-1.0);
-                    return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
                 }
             }
         }
@@ -281,14 +289,14 @@ public class Simplex {
                vertices.remove(0); // d
                direction = abc;
                     // LOG.warning("Misirable results.  Near A.");
-               return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
             } else {        // 12x
                     // 4 over AC
                     // [ABCD]-> [AC] -> see above.
                     vertices.remove(2); // b
                vertices.remove(0); // d
                     direction = vecstuff.cross(vecstuff.cross(ac, a0), ac);
-               return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
             }
           } else {
                 if (over_adb) { //1x3
@@ -297,13 +305,13 @@ public class Simplex {
                     vertices.remove(1); // c
                vertices.remove(0); // d
                     direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
-               return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
             } else {        // 1xx
               // 1 over ABC.
               // [ABC] -> ABC
                vertices.remove(0); // d
                direction = abc;
-               return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
             }
           }
         } else { // x??
@@ -314,13 +322,13 @@ public class Simplex {
                vertices.remove(2); // b
                vertices.remove(1); // c
                direction = vecstuff.cross(vecstuff.cross(ad, a0), ad);
-               return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
             } else {        // x2x
                     // 2 over ACD
                     // [ACD] -> ACD
                     vertices.remove(2); // b
                     direction = acd;
-               return AddCheck(direction);
+                    return AddCheck(a, ab, direction);
             }
           } else { // xx?
                 if (over_adb) {  // xx3
@@ -331,22 +339,13 @@ public class Simplex {
                     vertices.add(d);
                     vertices.add(a); // now adb
                     direction = adb;
-                    return AddCheck(direction);
-            } else {        // xxx
-              // 8 Probably intersecting...
-              intersecting = true;
+                    return AddCheck(a, ab, direction);
+                } else {        // xxx
+                    // 8 Probably intersecting... A is closer to origin than B, C or D, in fact, A < B < C < D.
+                    // Therefore in this region, we are intersecting.
+                    intersecting = true;
                     // LOG.warning("INTERSECTING!");
-                    V3 b0 = new V3(b).ScalarMultiply(-1.0);
-                    V3 bc = vecstuff.add(c, b0);
-                    V3 bd = vecstuff.add(d, b0);
-                    V3 bdc = vecstuff.cross(bd, bc);
-                    boolean over_bdc = vecstuff.dot(bdc, a0) > 0.0;
-                    if (over_bdc) {
-                        // LOG.warning("Intersection says YES!!!!");
-                    } else {
-                        // LOG.warning("Intersection says NOOOOOOOOOOOOO!!!!");
-                    }
-              return false;
+                    return false;
             }
           }
        }  
@@ -367,9 +366,11 @@ public class Simplex {
       return sb.toString();
    }
 
-    public String toOpenScad() {
+    public String toOpenScad(String module_name) {
         StringBuilder sb = new StringBuilder();
-        sb.append("module Simplex_points() {\n");
+        sb.append("module ");
+        sb.append(module_name);
+        sb.append("() {\n");
         sb.append("color(\"yellow\") polyhedron( points=[");
         for (Integer i = 0; i < vertices.size(); i++) {
             V3 t = vertices.get(i);
@@ -384,10 +385,17 @@ public class Simplex {
                 sb.append(",");
             sb.append("\n");
         }
-        sb.append("], faces = [[1,2,3],[0,2,3],[0,1,3],[0,1,2]]);\n");
+        sb.append("], faces = [");
+        int vsize = vertices.size();
+        if (vsize == 3) {
+            sb.append("[0,1,2]]);\n");
+        } else if (vsize == 4) {
+            sb.append("[1,2,3],[0,2,3],[0,1,3],[0,1,2]]);\n");
+        } else {
+            sb.append("]);\n");
+        }
         sb.append("}\n");
         return sb.toString();
     }
 
 }
-

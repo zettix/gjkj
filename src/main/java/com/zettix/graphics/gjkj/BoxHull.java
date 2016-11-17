@@ -84,7 +84,7 @@ public class BoxHull extends BaseHull implements Hull {
     }
 
     @Override
-    public String toOpenScad() {
+    public String toOpenScad(String module_name, boolean hit) {
         // 000 00z 0y0 0yz x00 x0z xy0 xyz
         //  0   1   2   3   4   5   6  7
         //  0   4   3   7   1   5   2  6
@@ -99,7 +99,9 @@ public class BoxHull extends BaseHull implements Hull {
         perm.put(6, 7);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("module A() {\n");
+        sb.append("module ");
+        sb.append(module_name);
+        sb.append("() {\n");
         sb.append("CubePoints = [\n");
         for (Integer i = 0; i < 8; i++) {
             V3 t = corners.get(perm.get(i));

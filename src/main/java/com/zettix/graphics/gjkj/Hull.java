@@ -5,7 +5,8 @@ package com.zettix.graphics.gjkj;
  */
 
 public interface Hull {
-    M4 transform = null;
+//  M4 transform = null;
+
     V3 Support(V3 direction);
 
     V3 GetCorner(int index);
@@ -16,5 +17,5 @@ public interface Hull {
 
     String toString();
 
-    String toOpenScad();
+    String toOpenScad(String module_name, boolean hit);
 }

@@ -20,8 +20,16 @@ public class TetHull extends BaseHull implements Hull {
     }
 
     @Override
-    public String toOpenScad() {
+    public String toOpenScad(String module_name, boolean hit) {
         StringBuilder sb = new StringBuilder();
+        sb.append("module ");
+        sb.append(module_name);
+        sb.append("() { \n");
+        if (hit) {
+            sb.append("color(\"lightblue\"");
+        } else {
+            sb.append("color(\"blue\"");
+        }
         sb.append("polyhedron( points=[");
         for (Integer i = 0; i < 4; i++) {
             V3 t = corners.get(i);
@@ -37,6 +45,7 @@ public class TetHull extends BaseHull implements Hull {
             sb.append("\n");
         }
         sb.append("], faces = [[1,2,3],[0,2,3],[0,1,3],[0,1,2]]);\n");
+        sb.append("} \n");
         return sb.toString();
     }
 }
