@@ -45,7 +45,12 @@ Actual distance is a harder problem.
    Hull is the interface, you override Support() and anything else in BaseHull() which has convenent defaults.
 
 ## Testing Environment:
-  Uses TestNG framework.  OpenScad to visualize some results.
+  Uses TestNG framework. Coverage stats from IntelliJ:
+  Classes: 100%
+  Methods: 83%
+  Lines: 91%
+  
+  OpenScad to visualize some results.
   In this one, the Icecream Cone test, we see two hulls, cones with hemispherical caps, go from colliding to free of each other.  When colliding, they are red, and the simplex, in yellow, contains the origin.  As they separate, the simplex loses hold of the origin and freaks out a bit trying to get it.  When green, the hulls are not colliding.
   
   ![animated collision test](https://github.com/zettix/gjkj/blob/master/resources/collision_test_icecream.gif)
