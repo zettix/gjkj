@@ -4,7 +4,7 @@
 
 GJK is the Gilbert Johnson Keerthi Collision Detection Algorithm.
 In short, a clever decomposition of the dot product to see if two
-convex hulls, when combined in Minkowski Sum, contain the origin.
+convex hulls, when subtracted in Minkowski Sum, contain the origin.
 
 ## Usage:
 
@@ -46,6 +46,8 @@ Actual distance is a harder problem.
 
 ## Testing Environment:
   Uses TestNG framework.  OpenScad to visualize some results.
+  In this one, the Icecream Cone test, we see two hulls, cones with hemispherical caps, go from colliding to free of each other.  When colliding, they are red, and the simplex, in yellow, contains the origin.  As they separate, the simplex loses hold of the origin and freaks out a bit trying to get it.  When green, the hulls are not colliding.
+  
   ![animated collision test](https://github.com/zettix/gjkj/blob/master/resources/collision_test_icecream.gif)
 
 ### Author: Sean Brennan, 2016
