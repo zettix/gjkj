@@ -1,6 +1,8 @@
 package com.zettix.graphics.gjkj;
 
 /**
+ * This is an ad-hoc vector library with dot product, cross product, and a few others.
+ *
  * Created by seanbrennan on 11/8/16.
  */
 public class vecstuff {

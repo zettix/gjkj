@@ -3,6 +3,10 @@ package com.zettix.graphics.gjkj;
 import java.util.Vector;
 
 /**
+ * Simple 4x4 matrix library.
+ *
+ * I cannot find a stripped down matrix library so I wrote this.
+ *
  * Created by seanbrennan on 11/9/16.
  */
 public class M4 extends Vector<Double> {

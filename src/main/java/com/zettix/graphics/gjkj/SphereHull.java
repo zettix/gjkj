@@ -1,6 +1,8 @@
 package com.zettix.graphics.gjkj;
 
 /**
+ * While sphere to sphere collison detection is extremely fast, GJK allows mixing hulls. e.g. sphere v.s. capsule.
+ *
  * Created by sean on 11/14/16.
  */
 public class SphereHull extends BaseHull implements Hull {
@@ -72,6 +74,8 @@ public class SphereHull extends BaseHull implements Hull {
         sb.append("], r =");
         sb.append(radius);
         sb.append(");}\n");
+        sb.append(module_name);
+        sb.append("();\n");
         return sb.toString();
     }
 }

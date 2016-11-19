@@ -1,21 +1,25 @@
 package com.zettix.graphics.gjkj;
 
 /**
+ * This interface defines a GJK hull with a few benefits:
+ * Support(V3): only real part of a GJK hull.
+ *
+ * ApplyTransform(): Call this to transform hull orientation to internal matrix.
+ *    Suggest you start with new M4().Identity();
+ * UpdateTransform(m4): just multiplies the internal transform matrix.
+ *
+ * GetCorner(index) :  actually this sucks, try to remove it.
+ * toString() for debugging. not needed for actual collision detection.
+ * toOpenScad() for visualization of results. not needed for actual collision detection.
+ *
  * Created by seanbrennan on 11/8/16.
  */
 
 public interface Hull {
-//  M4 transform = null;
-
     V3 Support(V3 direction);
-
     V3 GetCorner(int index);
-
     void ApplyTransform();
-
     void UpdateTransform(M4 m4);
-
     String toString();
-
     String toOpenScad(String module_name, boolean hit);
 }

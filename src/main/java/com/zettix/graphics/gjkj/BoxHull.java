@@ -6,11 +6,13 @@ import java.util.Map;
 /**
  * Created by seanbrennan on 11/8/16.
  *
+ * This is the box hull, [0,0,0] - [x, y, z] initialization.
+ *
  * unwound, a cube is:
  * 000, 00z, 0y0, 0yz, x00, x0z, xy0, xyz
  *    0,  1,   2,   3,   4,   5,   6,   7
  * 12 edges.  needed?  maybe not, maybe for
- * hill climbing for a faster support funcition.
+ * hill climbing for a faster support function.
  *
  */
 
@@ -85,9 +87,9 @@ public class BoxHull extends BaseHull implements Hull {
 
     @Override
     public String toOpenScad(String module_name, boolean hit) {
-        // 000 00z 0y0 0yz x00 x0z xy0 xyz
-        //  0   1   2   3   4   5   6  7
-        //  0   4   3   7   1   5   2  6
+        // 000 00z 0y0 0yz x00 x0z xy0 xyz  This is here because
+        //  0   1   2   3   4   5   6  7    my map and a cube map
+        //  0   4   3   7   1   5   2  6    I'm using are different.  Plus I'm lazy. This one works.
         Map<Integer, Integer> perm = new HashMap<>();
         perm.put(0, 0);
         perm.put(4, 1);
@@ -104,14 +106,7 @@ public class BoxHull extends BaseHull implements Hull {
         sb.append("() {\n");
         sb.append("CubePoints = [\n");
         for (Integer i = 0; i < 8; i++) {
-            V3 t = corners.get(perm.get(i));
-            sb.append("[");
-            sb.append(t.get(0));
-            sb.append(",");
-            sb.append(t.get(1));
-            sb.append(",");
-            sb.append(t.get(2));
-            sb.append("]");
+            sb.append(corners.get(perm.get(i)));
             if (i != 7)
                 sb.append(",");
             sb.append("\n");
@@ -126,6 +121,8 @@ public class BoxHull extends BaseHull implements Hull {
         sb.append("[7,4,0,3]]; // left\n");
         sb.append("polyhedron( CubePoints, CubeFaces );\n");
         sb.append("}\n");
+        sb.append(module_name);
+        sb.append("();\n");
         return sb.toString();
     }
 }

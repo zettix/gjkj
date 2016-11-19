@@ -1,6 +1,8 @@
 package com.zettix.graphics.gjkj;
 
 /**
+ * Tetrahedron hull, rather basic, from [0, 0, 0] to [x, y, z] (apex)
+ *
  * Created by sean on 11/12/16.
  */
 public class TetHull extends BaseHull implements Hull {
@@ -32,20 +34,15 @@ public class TetHull extends BaseHull implements Hull {
         }
         sb.append("polyhedron( points=[");
         for (Integer i = 0; i < 4; i++) {
-            V3 t = corners.get(i);
-            sb.append("[");
-            sb.append(t.get(0));
-            sb.append(",");
-            sb.append(t.get(1));
-            sb.append(",");
-            sb.append(t.get(2));
-            sb.append("]");
+            sb.append(corners.get(i));
             if (i != 3)
                 sb.append(",");
             sb.append("\n");
         }
         sb.append("], faces = [[1,2,3],[0,2,3],[0,1,3],[0,1,2]]);\n");
         sb.append("} \n");
+        sb.append(module_name);
+        sb.append("();\n");
         return sb.toString();
     }
 }

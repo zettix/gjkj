@@ -3,6 +3,10 @@ package com.zettix.graphics.gjkj;
 import java.util.Vector;
 
 /**
+ * BaseHull is a good starting point for many hulls, often subclassed.
+ *
+ * Basically shows how the tranformation matrices are used.
+ *
  * Created by sean on 11/12/16.
  */
 public class BaseHull implements Hull {

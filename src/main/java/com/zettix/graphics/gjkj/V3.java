@@ -3,6 +3,10 @@ package com.zettix.graphics.gjkj;
 import java.util.Vector;
 
 /**
+ * I'm not happy with 3-scalar vectors, so I wrote this.
+ *
+ * As a class, I can change it I think, to something better.
+ *
  * Created by seanbrennan on 11/9/16.
  */
 public class V3 extends Vector<Double> {

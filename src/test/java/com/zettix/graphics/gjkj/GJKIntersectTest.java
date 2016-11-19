@@ -117,8 +117,7 @@ public class GJKIntersectTest {
                 if (theta > 0.33) {
                     result = true;
                 }
-                String tail = "\nA();\nB();\nsimplex();\n";
-                LOG.warning(a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + tail);
+                LOG.warning(a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + OpenScadAxes());
             }
             Assert.assertTrue(result);
 
@@ -144,8 +143,7 @@ public class GJKIntersectTest {
                 if (theta > 2.0) {
                     result = true;
                 }
-                String tail = " \n$fn=40;\n\nA();\nB();\nsimplex();\n";
-                LOG.warning(a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + tail);
+                LOG.warning(a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + OpenScadAxes());
             }
             Assert.assertTrue(result);
         }
@@ -220,8 +218,7 @@ public class GJKIntersectTest {
                 if (theta > 5.0) {
                     result = true;
                 }
-                String tail = " \n$fn=40;\n\nA();\nB();\nsimplex();\n";
-                String foo = a_cap.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_cap.toOpenScad("B", result) + tail + OpenScadAxes();
+                String foo = a_cap.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_cap.toOpenScad("B", result) + OpenScadAxes();
                 LOG.warning("\n" + foo);
                 WriteFile("capsule-" + theta, foo);
             }

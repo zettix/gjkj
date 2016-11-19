@@ -129,6 +129,8 @@ public class CapsuleHull extends BaseHull implements Hull {
         sb.append(");\n"); //sphere 2
         sb.append("};\n"); //hull
         sb.append("};\n");  // module
+        sb.append(module_name);
+        sb.append("();\n");
         return sb.toString();
     }
 }
