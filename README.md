@@ -4,7 +4,7 @@
 
 GJK is the Gilbert Johnson Keerthi Collision Detection Algorithm.
 In short, a clever decomposition of the dot product to see if two
-convex hulls, when subtracted in Minkowski Sum, contain the origin.
+convex hulls, when subtracted in a Minkowski Sum, contain the origin.
 
 ## Usage:
 
@@ -42,7 +42,7 @@ Actual distance is a harder problem.
 
 ## Hulls:
    GJK has great flexibility with Hulls.  More will be added, but box and tetrahedron work.
-   Hull is the interface, you override Support() and anything else in BaseHull() which has convenent defaults.
+   Hull is the interface, you override Support() and anything else in BaseHull() which has convenient defaults.
 
 ## Testing Environment:
   Uses TestNG framework. Coverage stats from IntelliJ:
