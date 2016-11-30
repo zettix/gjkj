@@ -15,6 +15,10 @@ There are a few things I dislike: my differently scaled sphere capsule, icecream
 
 ![edge on edge test fail](https://github.com/zettix/gjkj/blob/master/resources/edge_bug_gjkj.png)
 
+Here is how I test outside of an application.  I integrate it with OpenScad and observe what I consider typical pathological conditions that would make this algorithm shine.  To make it robust, it must be complex.  Sphere to sphere testings looks so attractive for its speed and simplicity, one would be nuts not to use it first here.
+
+Here is the test anim as of this commit date, showing how the bug was discovered.
+![edge on edge test fail_animation](https://github.com/zettix/gjkj/blob/master/resources/edge-detection-bug.gif)
 
 ## Usage:
 
