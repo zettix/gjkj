@@ -1,7 +1,12 @@
 package com.zettix.graphics.gjkj;
 
+import com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull.Hull;
+import com.zettix.graphics.gjkj.util.V3;
+import com.zettix.graphics.gjkj.util.vecstuff;
+
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.logging.Logger;
 
 /**
  * Created by seanbrennan on 11/9/16.
@@ -20,7 +25,7 @@ import java.util.HashSet;
 public class Simplex {
     private static final V3 ZERO = new V3(0.0, 0.0, 0.0);
     private static final double CLOSE = 0.0000001;
-    // // private static Logger LOG = Logger.getLogger(Simplex.class.getName());
+    private static Logger LOG = Logger.getLogger(Simplex.class.getName());
     public boolean intersecting = false;
     protected ArrayList<V3> vertices = new ArrayList<>();
     protected HashSet<V3> seen = new HashSet<>();
@@ -136,7 +141,7 @@ public class Simplex {
             return false;
         }
         V3 c = hull.Support(support_direction);
-        // LOG.warning("ZZZZZ Addcheck says direction: " + supp + " -> " + c + " corner]");
+        LOG.warning("ZZZZZ Addcheck says direction: " + support_direction + " -> " + c + " corner]");
        if (SeenMe(c)) {
              return false;
         }

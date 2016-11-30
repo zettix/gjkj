@@ -1,4 +1,4 @@
-package com.zettix.graphics.gjkj;
+package com.zettix.graphics.gjkj.util;
 
 import java.util.Vector;
 

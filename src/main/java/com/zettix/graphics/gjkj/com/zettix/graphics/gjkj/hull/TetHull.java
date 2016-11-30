@@ -1,4 +1,7 @@
-package com.zettix.graphics.gjkj;
+package com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull;
+
+import com.zettix.graphics.gjkj.util.M4;
+import com.zettix.graphics.gjkj.util.V3;
 
 /**
  * Tetrahedron hull, rather basic, from [0, 0, 0] to [x, y, z] (apex)

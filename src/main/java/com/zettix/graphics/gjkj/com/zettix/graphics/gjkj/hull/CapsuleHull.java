@@ -1,4 +1,7 @@
-package com.zettix.graphics.gjkj;
+package com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull;
+
+import com.zettix.graphics.gjkj.util.V3;
+import com.zettix.graphics.gjkj.util.vecstuff;
 
 /**
  * Capsule Hull

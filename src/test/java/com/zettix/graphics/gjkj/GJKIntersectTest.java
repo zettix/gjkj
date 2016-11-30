@@ -1,5 +1,8 @@
 package com.zettix.graphics.gjkj;
 
+import com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull.*;
+import com.zettix.graphics.gjkj.util.M4;
+import com.zettix.graphics.gjkj.util.V3;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -89,40 +92,78 @@ public class GJKIntersectTest {
     }
 
     @Test
+    public void testPositionedBlocks() {
+         double theta = -4.7 ;
+                 LOG.warning("Testing rotating blocks: " + theta);
+            V3 pointy = new V3(2.0, 2.0, 2.0);
+            a_hull = new BoxHull(pointy);
+            b_hull = new BoxHull(pointy);
+            //M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, 0.0, f45 + theta);
+            //M4 a_mover = new M4(mover.Move(0.0, 12.0,  .0));
+            // M4 mover = new M4().Identity().Move(12.0, .0, .0).Rotate(0.0, 0.0, f45 + theta);
+            M4 mover = new M4().Identity().Move(0.0, 12.0 - theta, .0).Rotate(0.0, 0.0, f45);
+            M4 a_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
+
+            //mover = mover.Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, f45, 0.0);
+            //M4 b_mover = new M4(mover.Move(0.0, 12.0, .0));
+            mover = new M4().Identity().Move(0.0, 12.0, .0).Rotate(0.0, f45, 0.0);
+            M4 b_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
+
+            b_hull.UpdateTransform(b_mover);
+            b_hull.ApplyTransform();
+            a_hull.UpdateTransform(a_mover);
+            a_hull.ApplyTransform();
+
+            GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
+            boolean result = gjk.Intersect();
+                        Assert.assertTrue(result);
+
+    }
+
+    @Test
     public void testRotatingBlocks() {
         // The bad boy.  two cubes, rotated so only their edges are intersecting.
         // A bunch so in theory only an arc will intersect. we can set this point.
-        for (double theta = 0.0; theta < Math.PI / 4; theta += 0.02) {
+        boolean animate = true;
+        for (double theta = -6.5; theta < 6.5; theta += .3) {
             LOG.warning("Testing rotating blocks: " + theta);
             V3 pointy = new V3(2.0, 2.0, 2.0);
             a_hull = new BoxHull(pointy);
             b_hull = new BoxHull(pointy);
+            //M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, 0.0, f45 + theta);
+            //M4 a_mover = new M4(mover.Move(0.0, 12.0,  .0));
+            // M4 mover = new M4().Identity().Move(12.0, .0, .0).Rotate(0.0, 0.0, f45 + theta);
+            M4 mover = new M4().Identity().Move(0.0, 12.0 - theta, .0).Rotate(0.0, 0.0, f45).Scale(2.0, 2.0, 2.0);
+            M4 a_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
 
-            M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, 0.0, f45);
-            a_hull.UpdateTransform(mover);
-            a_hull.ApplyTransform();
+            //mover = mover.Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, f45, 0.0);
+            //M4 b_mover = new M4(mover.Move(0.0, 12.0, .0));
+            mover = new M4().Identity().Move(0.0, 12.0, .0).Rotate(f45, 0.0, 0.0).Scale(2.0, 2.0, 2.0);
+            M4 b_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
 
-            mover.Identity().Move(1.5 + theta, -1.0, -1.0).Rotate(0.0, f45, 0.0);
-            b_hull.UpdateTransform(mover);
-            // b_hull.ApplyTransform();
-            //mover.Identity().Move(4.1, 0.0, 0.0);
-            //b_hull.UpdateTransform(mover);
+            b_hull.UpdateTransform(b_mover);
             b_hull.ApplyTransform();
+            a_hull.UpdateTransform(a_mover);
+            a_hull.ApplyTransform();
 
             GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
             boolean result = gjk.Intersect();
 
             if (!result) {
                 LOG.warning("SIMPLEX MODEL: " + theta);
-                if (theta > 0.33) {
+                if (theta > 0.33 && theta < 0.33) {
                     result = true;
                 }
-                LOG.warning(a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + OpenScadAxes());
             }
-            Assert.assertTrue(result);
-
+            if (animate) {
+                String foo = a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + OpenScadAxes();
+                LOG.warning("\n" + foo);
+                WriteFile("capsule_" + theta + ".scad", foo);
+            }
+            if (!animate) {
+                Assert.assertTrue(result);
+            }
         }
-
     }
 
     @Test
@@ -188,6 +229,7 @@ public class GJKIntersectTest {
 
     @Test
     void testCapsulesColliding() {
+        boolean animate = false;
         LOG.warning("Testing capsules:");
         // translate = -6.31 6.76 -0.08, rot 81.6, 0, 98.5, dist 74.40
         for (double theta = 0.0;
@@ -203,26 +245,28 @@ public class GJKIntersectTest {
             b_cap.setC1(new V3(-3.0, 0.0, 0.0));
             b_cap.setC2(new V3(6.0, 0.0, 0.0));
 
-            M4 a_mover = new M4().Identity().Move(0.0, 12.0, -1.0).Rotate(0.0, 0.0, 0.0).Move(0.0, 0.0, 0.0);
-            M4 b_mover = new M4().Identity().Rotate(0.0, 0.0, 0.0).Move(-1.0, theta + 12.0, 0.0);
-
+            M4 a_mover = new M4().Identity().Move(0.0, 12.0, -1.0);
+            M4 b_mover = new M4().Identity().Move(-1.0, theta + 12.0, 0.0);
             b_cap.UpdateTransform(b_mover);
             b_cap.ApplyTransform();
             a_cap.UpdateTransform(a_mover);
             a_cap.ApplyTransform();
             GJKIntersect gjk = new GJKIntersect(a_cap, b_cap);
             boolean result = gjk.Intersect();
-            //if (!result) {
-            if (true) {
+            if (!result) {
                 LOG.warning("SIMPLEX MODEL: " + theta);
-                if (theta > 5.0) {
+                if (theta > 2.98) {
                     result = true;
                 }
-                String foo = a_cap.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_cap.toOpenScad("B", result) + OpenScadAxes();
-                LOG.warning("\n" + foo);
-                WriteFile("capsule-" + theta, foo);
+                if (animate) {
+                    String foo = a_cap.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_cap.toOpenScad("B", result) + OpenScadAxes();
+                    LOG.warning("\n" + foo);
+                    WriteFile("capsule_" + theta +".scad", foo);
+                }
             }
-            //Assert.assertTrue(result);
+            if (!animate) {
+                Assert.assertTrue(result);
+            }
         }
     }
 }

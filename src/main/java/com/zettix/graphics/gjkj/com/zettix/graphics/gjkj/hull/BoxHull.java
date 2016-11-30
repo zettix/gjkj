@@ -1,4 +1,8 @@
-package com.zettix.graphics.gjkj;
+package com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull;
+
+import com.zettix.graphics.gjkj.util.M4;
+import com.zettix.graphics.gjkj.util.V3;
+import com.zettix.graphics.gjkj.util.vecstuff;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -119,6 +123,11 @@ public class BoxHull extends BaseHull implements Hull {
         sb.append("[5,6,2,1],  // right\n");
         sb.append("[6,7,3,2],  // back\n");
         sb.append("[7,4,0,3]]; // left\n");
+        if (hit) {
+            sb.append("color(\"red\")");
+        } else {
+            sb.append("color(\"green\")");
+        }
         sb.append("polyhedron( CubePoints, CubeFaces );\n");
         sb.append("}\n");
         sb.append(module_name);

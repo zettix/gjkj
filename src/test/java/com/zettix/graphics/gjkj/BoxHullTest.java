@@ -1,5 +1,9 @@
 package com.zettix.graphics.gjkj;
 
+import com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull.BoxHull;
+import com.zettix.graphics.gjkj.util.M4;
+import com.zettix.graphics.gjkj.util.V3;
+import com.zettix.graphics.gjkj.util.vecstuff;
 import org.testng.Assert;
 
 import java.util.Vector;

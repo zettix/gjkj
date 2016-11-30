@@ -1,4 +1,4 @@
-package com.zettix.graphics.gjkj;
+package com.zettix.graphics.gjkj.util;
 
 /**
  * This is an ad-hoc vector library with dot product, cross product, and a few others.

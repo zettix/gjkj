@@ -1,5 +1,8 @@
 package com.zettix.graphics.gjkj;
 
+import com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull.TetHull;
+import com.zettix.graphics.gjkj.util.V3;
+import com.zettix.graphics.gjkj.util.vecstuff;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
