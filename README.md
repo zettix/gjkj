@@ -6,6 +6,16 @@ GJK is the Gilbert Johnson Keerthi Collision Detection Algorithm.
 In short, a clever decomposition of the dot product to see if two
 convex hulls, when subtracted in a Minkowski Sum, contain the origin.
 
+## Top Bug:
+This highlights one numerical issue with GJK as I understand it.  When building the simplex, the base triangle contains the origin.  The dot product of the last triangle vertex to the origin and the normal to the triangle is zero, they being 90 degrees apart.  Numerical instability can mean your next direction is essentially random, up or down from the base triangle.
+
+To be honest I'm working in the dark here.  If you must detect if the triangle contains the origin, and by going directly toward the origin you more or less strive for that outcome, you have to test for this case.  Here is a failure.  The simplex clearly is a triangle containing the origin, the simplex growth is terminated, and no collide is issued, hence green.
+
+There are a few things I dislike: my differently scaled sphere capsule, icecream in the animation, is wrong because I need the normal to the cone to do it right, and I need unit vectors so I need a square root and a divide.  If the spheres are the same size you do not need to square root or divide.  In fact another bug had to test if the simplex, as a line segment, contained the origin.  This is already in the code and I'm doubting my need to do these checks, but the bugs are right there, here it is.
+
+![edge on edge test fail](https://github.com/zettix/gjkj/blob/master/resources/edge_bug_gjkj.png)
+
+
 ## Usage:
 
 When you feel like it's time to check if two convex hulls collide, do this:
