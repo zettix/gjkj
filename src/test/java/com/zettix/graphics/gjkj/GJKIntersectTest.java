@@ -1,6 +1,6 @@
 package com.zettix.graphics.gjkj;
 
-import com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull.*;
+import com.zettix.graphics.gjkj.hull.*;
 import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
 import org.testng.Assert;
