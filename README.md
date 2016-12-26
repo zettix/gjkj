@@ -6,19 +6,15 @@ GJK is the Gilbert Johnson Keerthi Collision Detection Algorithm.
 In short, a clever decomposition of the dot product to see if two
 convex hulls, when subtracted in a Minkowski Sum, contain the origin.
 
-## Top Bug:
+## Top Bug Fixed: Origin inside 2-Simplex.
 This highlights one numerical issue with GJK as I understand it.  When building the simplex, the base triangle contains the origin.  The dot product of the last triangle vertex to the origin and the normal to the triangle is zero, they being 90 degrees apart.  Numerical instability can mean your next direction is essentially random, up or down from the base triangle.
+There are other edge cases, like being in the plane of AC perpendicular to ABC, or any other edge, making the new support direction random, I'm testing for that now. To be honest I'm working in the dark here.  If you must detect if the triangle contains the origin, and by going directly toward the origin you more or less strive for that outcome, you have to test for this case.  After testing, it works.
 
-To be honest I'm working in the dark here.  If you must detect if the triangle contains the origin, and by going directly toward the origin you more or less strive for that outcome, you have to test for this case.  Here is a failure.  The simplex clearly is a triangle containing the origin, the simplex growth is terminated, and no collide is issued, hence green.
+It's kind of amusing the 3-Simplex is actually more simple to code than the 2-simplex.
 
-There are a few things I dislike: my differently scaled sphere capsule, icecream in the animation, is wrong because I need the normal to the cone to do it right, and I need unit vectors so I need a square root and a divide.  If the spheres are the same size you do not need to square root or divide.  In fact another bug had to test if the simplex, as a line segment, contained the origin.  This is already in the code and I'm doubting my need to do these checks, but the bugs are right there, here it is.
+There are a few things I dislike: my differently scaled sphere capsule, icecream in the animation, is wrong because I need the normal to the cone to do it right, and I need unit vectors so I need a square root and a divide.  If the spheres are the same size you do not need to square root or divide.  In fact another bug had to test if the simplex, as a line segment, contained the origin.
 
-![edge on edge test fail](https://github.com/zettix/gjkj/blob/master/resources/edge_bug_gjkj.png)
-
-Here is how I test outside of an application.  I integrate it with OpenScad and observe what I consider typical pathological conditions that would make this algorithm shine.  To make it robust, it must be complex.  Sphere to sphere testings looks so attractive for its speed and simplicity, one would be nuts not to use it first here.
-
-Here is the test anim as of this commit date, showing how the bug was discovered.
-![edge on edge test fail_animation](https://github.com/zettix/gjkj/blob/master/resources/edge-detection-bug.gif)
+Here is how I test outside of an application.  I integrate it with OpenScad and observe what I consider typical pathological conditions that would make this algorithm shine.  To make it robust, it must be complex.  Sphere to sphere testings looks so attractive for its speed and simplicity, one would be nuts not to use it first.
 
 ## Usage:
 
@@ -66,7 +62,7 @@ Actual distance is a harder problem.
   
   OpenScad to visualize some results.
   In this one, the Icecream Cone test, we see two hulls, cones with hemispherical caps, go from colliding to free of each other.  When colliding, they are red, and the simplex, in yellow, contains the origin.  As they separate, the simplex loses hold of the origin and freaks out a bit trying to get it.  When green, the hulls are not colliding.
-  
+  ![animated cube test](https://github.com/zettix/gjkj/blob/master/resources/cube-edge-test1.gif)
   ![animated collision test](https://github.com/zettix/gjkj/blob/master/resources/collision_test_icecream.gif)
 
 ### Author: Sean Brennan, 2016
