@@ -1,7 +1,7 @@
 package com.zettix.graphics.gjkj;
 
-import com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull.Hull;
-import com.zettix.graphics.gjkj.com.zettix.graphics.gjkj.hull.MinkowskiHull;
+import com.zettix.graphics.gjkj.hull.Hull;
+import com.zettix.graphics.gjkj.hull.MinkowskiHull;
 
 /**
  * This is the main collision routine.  You give it two hulls and then call Intersect()
