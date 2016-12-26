@@ -93,20 +93,23 @@ public class GJKIntersectTest {
 
     @Test
     public void testPositionedBlocks() {
-         double theta = -4.7 ;
-                 LOG.warning("Testing rotating blocks: " + theta);
+        double theta = -4.700000000000001;
+
+        LOG.warning("Testing POSITIONED blocks: " + theta);
+        //M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, 0.0, f45 + theta);
+        //M4 a_mover = new M4(mover.Move(0.0, 1            LOG.warning("Testing rotating blocks: " + theta);
             V3 pointy = new V3(2.0, 2.0, 2.0);
             a_hull = new BoxHull(pointy);
             b_hull = new BoxHull(pointy);
             //M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, 0.0, f45 + theta);
             //M4 a_mover = new M4(mover.Move(0.0, 12.0,  .0));
             // M4 mover = new M4().Identity().Move(12.0, .0, .0).Rotate(0.0, 0.0, f45 + theta);
-            M4 mover = new M4().Identity().Move(0.0, 12.0 - theta, .0).Rotate(0.0, 0.0, f45);
+        M4 mover = new M4().Identity().Move(0.0, 12.0 - theta, .0).Rotate(0.0, 0.0, f45).Scale(2.0, 2.0, 2.0);
             M4 a_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
 
             //mover = mover.Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, f45, 0.0);
             //M4 b_mover = new M4(mover.Move(0.0, 12.0, .0));
-            mover = new M4().Identity().Move(0.0, 12.0, .0).Rotate(0.0, f45, 0.0);
+        mover = new M4().Identity().Move(0.0, 12.0, .0).Rotate(f45, 0.0, 0.0).Scale(2.0, 2.0, 2.0);
             M4 b_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
 
             b_hull.UpdateTransform(b_mover);
@@ -116,8 +119,11 @@ public class GJKIntersectTest {
 
             GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
             boolean result = gjk.Intersect();
-                        Assert.assertTrue(result);
-
+        String foo = a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + OpenScadAxes();
+        if (false) {
+            WriteFile("capsule_" + theta + ".scad", foo);
+        }
+        Assert.assertTrue(result);
     }
 
     @Test

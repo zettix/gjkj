@@ -1,11 +1,16 @@
 package com.zettix.graphics.gjkj.util;
 
-/**
+/*
  * This is an ad-hoc vector library with dot product, cross product, and a few others.
  *
  * Created by seanbrennan on 11/8/16.
  */
+
+import java.util.logging.Logger;
+
 public class vecstuff {
+    public static final Logger LOG = Logger.getLogger(vecstuff.class.getName());
+
     public static V3 cross(V3 v1, V3 v2) {
         V3 f = new V3();
         f.set(0, v1.get(1) * v2.get(2) - v1.get(2) * v2.get(1));
@@ -66,7 +71,25 @@ public class vecstuff {
             div = direction.get(2);
         }
         t /= div;
-        if ((t > 1.0001) || (t <= 0.0001)) {
+        if ((t > 1.0001) || (t <= -0.0001)) {
+            if (false) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("Origin not on :(");
+                sb.append(start.get(0));
+                sb.append(",");
+                sb.append(start.get(1));
+                sb.append(",");
+                sb.append(start.get(2));
+                sb.append(") : (");
+                sb.append(direction.get(0));
+                sb.append(",");
+                sb.append(direction.get(1));
+                sb.append(",");
+                sb.append(direction.get(2));
+                sb.append(") T: ");
+                sb.append(t);
+                LOG.warning(sb.toString());
+            }
             return false;
         }
         V3 testPoint = vecstuff.add(new V3(direction).ScalarMultiply(t), start);

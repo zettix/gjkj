@@ -30,6 +30,7 @@ public class Simplex {
     protected ArrayList<V3> vertices = new ArrayList<>();
     protected HashSet<V3> seen = new HashSet<>();
     private Hull hull;
+    private Double epsilon = 0.0000001;
 
     public Simplex(Hull hin) {
         hull = hin;
@@ -37,6 +38,14 @@ public class Simplex {
         if (!ok) {
             // LOG.warning("I could not even get 4 corners...");
         }
+    }
+
+    public Double getEpsilon() {
+        return epsilon;
+    }
+
+    public void setEpsilon(Double epsilon) {
+        this.epsilon = epsilon;
     }
 
     boolean SeenMe(V3 in) {
@@ -141,8 +150,9 @@ public class Simplex {
             return false;
         }
         V3 c = hull.Support(support_direction);
-        LOG.warning("ZZZZZ Addcheck says direction: " + support_direction + " -> " + c + " corner]");
+        // LOG.warning("ZZZZZ Addcheck says direction: " + support_direction + " -> " + c + " corner]");
        if (SeenMe(c)) {
+           LOG.warning("This should never happen.  I've seen this guy.");
              return false;
         }
         seen.add(c);
@@ -163,7 +173,7 @@ public class Simplex {
             // .......#.........................#############.A.....5......
             // .......#.......2............................###.............
             // ........#......^.........................###................
-            // ........#.......ABC=.................###...................
+            // ........#.......ABC=...(6)...........###...................
             // ........#.......ABxAC..............###......................
             // .........#.....V................###.........................
             // .........#.....3..............##............................
@@ -185,18 +195,38 @@ public class Simplex {
         V3 ac = vecstuff.add(c, a0);
         V3 abc = vecstuff.cross(ab, ac);
         // abc points straight out of the triangle.
-        if (vecstuff.dot(vecstuff.cross(abc, ac), a0) > 0.0) {
-          if (vecstuff.dot(ac, a0) > 0.0) {
+        double abcXac = vecstuff.dot(vecstuff.cross(abc, ac), a0);
+        if (abcXac * abcXac < epsilon) {
+            // promote to simplex.
+            // LOG.warning("abcXac weak");
+            if (OriginOnLineCheck(a, ac)) {
+                // LOG.warning("abcXac O on AC!");
+                return true;
+            }
+            // LOG.warning("abcXac O not! on AC!");
+            return AddCheck(a, ab, a0);  // origin not on AC, promote.
+        }
+        if (abcXac > 0.0) {
+            double acDa0 = vecstuff.dot(ac, a0);
+            if (acDa0 * acDa0 < epsilon) {
+                // In origin in plane of AC perpendicular to triangle
+                // just promote to simplex.
+                // LOG.warning("acDa0 weak");
+                return AddCheck(a, ab, a0);
+            }
+            if (acDa0 > 0.0) {
             // 1 closest to AC:
             // [A, C] : supp->ACxA0xAC
             vertices.remove(1);
             direction = vecstuff.cross(vecstuff.cross(ac, a0), ac);
+                // LOG.warning("AC won");
               return AddCheck(a, ab, direction);
           } else {
             if (vecstuff.dot(ab, a0) > 0.0) {  // STAR FACTOR
                // 4  [A, B] supp->ABxA0xAB
                vertices.remove(0);
                direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
+                // LOG.warning("Aba0 won");
                 return AddCheck(a, ab, direction);
             } else {
                // 5 closest to A.  bummer.
@@ -204,6 +234,7 @@ public class Simplex {
                vertices.remove(1);
                vertices.remove(0);
                direction = a0;
+                // LOG.warning("A won");
                 return AddCheck(a, ab, direction);
             }
           }
@@ -213,6 +244,7 @@ public class Simplex {
                     // 4  [A, B] supp->ABxA0xAB
                     vertices.remove(0);
                     direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
+                    // LOG.warning("AB won");
                     return AddCheck(a, ab, direction);
                 } else {
                     // 5 closest to A.  bummer.
@@ -220,12 +252,21 @@ public class Simplex {
                     vertices.remove(1);
                     vertices.remove(0);
                     direction = a0;
+                    // LOG.warning("A! won");
                     return AddCheck(a, ab, direction);
                 }
             } else {
-                if (vecstuff.dot(abc, a0) > 0.0) {
+                double abcDa0 = vecstuff.dot(abc, a0);
+                if (abcDa0 * abcDa0 < epsilon) {
+                    // in the plane of ABC and inside AB and AC, so in triangle.
+                    //LOG.warning("In the TRIANGLE!!!!!");
+                    intersecting = true;
+                    return true;
+                }
+                if (abcDa0 > 0.0) {
                     // 2 [A, B, C] supp -> abc
                     direction = abc;
+                    // LOG.warning("abc+! won");
                     return AddCheck(a, ab, direction);
                 } else {
                     // 3 [A, C, B] supp-> -abc
@@ -234,6 +275,7 @@ public class Simplex {
                     vertices.add(c);
                     vertices.add(a);
                     direction = abc.ScalarMultiply(-1.0);
+                    // LOG.warning("abc-! won" + abcDa0);
                     return AddCheck(a, ab, direction);
                 }
             }
