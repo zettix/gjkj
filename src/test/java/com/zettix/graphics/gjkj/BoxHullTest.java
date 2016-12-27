@@ -68,8 +68,7 @@ public class BoxHullTest {
         V3 v3 = new V3(10.0, 11.0, 12.0);
         BoxHull boxHull = new BoxHull(v3);
         M4 m4 = new M4().Identity().Move(1.0, 2.0, 3.0);
-        boxHull.UpdateTransform(m4);
-        boxHull.ApplyTransform();
+        boxHull.TransformWorldSpace(m4);
         V3 expected = new V3(1.0, 13.0, 3.0);
         V3 direction = new V3(-1.0, 1.0, -1.0);
         V3 result = boxHull.Support(direction);

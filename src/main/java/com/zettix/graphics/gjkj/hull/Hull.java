@@ -21,8 +21,10 @@ import com.zettix.graphics.gjkj.util.V3;
 public interface Hull {
     V3 Support(V3 direction);
     V3 GetCorner(int index);
-    void ApplyTransform();
-    void UpdateTransform(M4 m4);
+
+    void TransformObjectSpace(M4 m4);
+
+    void TransformWorldSpace(M4 m4);
     String toString();
     String toOpenScad(String module_name, boolean hit);
 }

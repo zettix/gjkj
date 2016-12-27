@@ -1,5 +1,6 @@
 package com.zettix.graphics.gjkj.hull;
 
+import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
 import com.zettix.graphics.gjkj.util.vecstuff;
 
@@ -44,8 +45,8 @@ public class SphereHull extends BaseHull implements Hull {
     }
 
     @Override
-    public void ApplyTransform() {
-        center = super.transform.Transform(center);
+    public void TransformWorldSpace(M4 m) {
+        center = m.Transform(center);
     }
 
     @Override

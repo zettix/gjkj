@@ -1,6 +1,5 @@
 package com.zettix.graphics.gjkj.hull;
 
-import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
 import com.zettix.graphics.gjkj.util.vecstuff;
 
@@ -22,38 +21,22 @@ import java.util.Map;
 
 public class BoxHull extends BaseHull implements Hull {
     // private final Logger LOG = Logger.getLogger(BoxHull.class.getName());
-    public M4 transform = new M4().Identity();
 
     public BoxHull() throws Exception{
         throw new Exception("No empty boxes!");
     }
 
     public BoxHull(final V3 dimensions) {
-        int info_len = dimensions.size();
         int corner_index = 0;
-        Init();
         for (int ix = 0; ix < 2; ix++) {
             for (int iy = 0; iy < 2; iy++) {
                 for (int iz = 0; iz < 2; iz++) {
                     V3 p = new V3(ix * dimensions.get(0), iy * dimensions.get(1), iz * dimensions.get(2));
-                    SetCorner(corner_index, p);
+                    objectCorners.add(p);
                     corner_index++;
                 }
             }
         }
-    }
-
-    private void Init() {
-        V3 v = new V3(0., 0., 0.);
-        int i;
-        for (i = 0; i < 8; i++) {
-            corners.add(new V3(v));
-        }
-        // LOG.warning("Corner size: " + corners.size());
-    }
-
-    private void SetCorner(int idx, V3 p) {
-        super.corners.set(idx, p);
     }
 
     @Override
@@ -63,16 +46,16 @@ public class BoxHull extends BaseHull implements Hull {
         // Also note that hill climbing would be an optimization.
         // TODO(sean): Add hill climbing with edge and corner graph.
         int max_i = 0;
-        Double maxdot = vecstuff.dot(direction, corners.get(0));
+        Double maxdot = vecstuff.dot(direction, worldCorners.get(0));
         Double tmpdot;
-        for (int i = 1; i < corners.size(); i++) {
-            tmpdot = vecstuff.dot(direction, corners.get(i));
+        for (int i = 1; i < worldCorners.size(); i++) {
+            tmpdot = vecstuff.dot(direction, worldCorners.get(i));
             if (tmpdot > maxdot) {
                 maxdot = tmpdot;
                 max_i = i;
             }
         }
-        V3 result = corners.get(max_i);
+        V3 result = worldCorners.get(max_i);
         // LOG.warning("Support box [Direction: " + direction + "] corner: " + result);
         //LOG.warning(toString());
         return result;
@@ -83,7 +66,7 @@ public class BoxHull extends BaseHull implements Hull {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 8; i++) {
             sb.append("Box: [");
-            sb.append(corners.get(i));
+            sb.append(worldCorners.get(i));
             sb.append("]\n");
         }
         return sb.toString();
@@ -110,7 +93,7 @@ public class BoxHull extends BaseHull implements Hull {
         sb.append("() {\n");
         sb.append("CubePoints = [\n");
         for (Integer i = 0; i < 8; i++) {
-            sb.append(corners.get(perm.get(i)));
+            sb.append(worldCorners.get(perm.get(i)));
             if (i != 7)
                 sb.append(",");
             sb.append("\n");

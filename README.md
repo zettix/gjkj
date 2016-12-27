@@ -25,11 +25,12 @@ M4 transform = new M4().Identity();
 transform.Move(x_delta, y_delta, z_delta);
 transform.Rotate(x_axis, y_axis, z_axis);
 transform.Scale(x_scale, y_scale, z_scale);
+hullA.TransformObjectSpace(transform);
 # ... or just provide a transformation matrix, 4x4.
 # Your parent object should have some idea of what hull it wants,
-# and probably has a transformation matrix you can use.
-hullA.UpdateTransform(transform);
-hullA.ApplyTransform();   # Applies transform to hull, to move it into position.
+# and probably has a transformation matrix you can use.  When ready, transform to world:
+M4 world_transform = new M4().Identity().Move(x, y, z);
+hullA.TramnsformWorldSpace(world_transform); # Applies transform to hull, to move it into position.
 ```
 
 Do the same for hullB
