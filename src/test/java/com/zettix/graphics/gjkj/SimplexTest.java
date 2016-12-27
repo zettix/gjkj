@@ -21,8 +21,7 @@ public class SimplexTest {
         Hull hull = new TetHull(size);
         LOG.info("tet hull: " + hull);
         M4 mover = new M4().Identity().Move(-1.2, -1.3, -1.4);
-        hull.UpdateTransform(mover);
-        hull.ApplyTransform();
+        hull.TransformWorldSpace(mover);
         LOG.info("hull: " + hull);
         Simplex simplex = new Simplex(hull);
         Assert.assertTrue(simplex.ContainsOrigin());
@@ -31,8 +30,7 @@ public class SimplexTest {
         hull = new TetHull(size);
         LOG.info("tet hull: " + hull);
         mover = new M4().Identity().Move(1.2, 1.3, 1.4);
-        hull.UpdateTransform(mover);
-        hull.ApplyTransform();
+        hull.TransformWorldSpace(mover);
         LOG.info("hull: " + hull);
         simplex = new Simplex(hull);
         Assert.assertFalse(simplex.ContainsOrigin());
@@ -70,8 +68,7 @@ public class SimplexTest {
         Hull hull = new TetHull(pointy);
         LOG.info("tet hull: " + hull);
         M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0);
-        hull.UpdateTransform(mover);
-        hull.ApplyTransform();
+        hull.TransformWorldSpace(mover);
         Simplex simplex = new Simplex(hull);
         simplex.vertices.clear();
         simplex.seen.clear();
@@ -85,15 +82,12 @@ public class SimplexTest {
         boolean result = simplex.ThreePlex();
         Assert.assertTrue(result);
     }
-
     @Test
     public void testFourPlex() throws Exception {
 
     }
-
     @Test
     public void testToString() throws Exception {
 
     }
-
 }

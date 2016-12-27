@@ -16,10 +16,10 @@ public class TetHull extends BaseHull implements Hull {
      * @param in Vector to create [0,0,0] [x,0,0] [0,y,0] [0, 0, z] tetrahedron.
      */
     public TetHull(V3 in) {
-        corners.add(new V3(0.0, 0.0, 0.0));
-        corners.add(new V3(in.get(0), 0.0, 0.0));
-        corners.add(new V3(0.0, in.get(1), 0.0));
-        corners.add(new V3(0.0, 0.0, in.get(2)));
+        objectCorners.add(new V3(0.0, 0.0, 0.0));
+        objectCorners.add(new V3(in.get(0), 0.0, 0.0));
+        objectCorners.add(new V3(0.0, in.get(1), 0.0));
+        objectCorners.add(new V3(0.0, 0.0, in.get(2)));
         // LOG.warning("TET!!!!: " + this.toString());
         // LOG.warning("TET SIZE: " + corners.size());
     }
@@ -37,7 +37,7 @@ public class TetHull extends BaseHull implements Hull {
         }
         sb.append("polyhedron( points=[");
         for (Integer i = 0; i < 4; i++) {
-            sb.append(corners.get(i));
+            sb.append(worldCorners.get(i));
             if (i != 3)
                 sb.append(",");
             sb.append("\n");

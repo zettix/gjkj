@@ -1,5 +1,6 @@
 package com.zettix.graphics.gjkj.hull;
 
+import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
 import com.zettix.graphics.gjkj.util.vecstuff;
 
@@ -83,9 +84,10 @@ public class CapsuleHull extends BaseHull implements Hull {
     }
 
     @Override
-    public void ApplyTransform() {
-        c1 = super.transform.Transform(c1);
-        c2 = super.transform.Transform(c2);
+    public void TransformWorldSpace(M4 m) {
+        // TODO(sean): need local and global centers so we can call TransformWorldSpace over and over like the other hulls.
+        c1 = m.Transform(c1);
+        c2 = m.Transform(c2);
         Init();
     }
 
