@@ -62,7 +62,8 @@ Actual distance is a harder problem.
   Lines: 91%
   
   OpenScad to visualize some results.
-  In this one, the Icecream Cone test, we see two hulls, cones with hemispherical caps, go from colliding to free of each other.  When colliding, they are red, and the simplex, in yellow, contains the origin.  As they separate, the simplex loses hold of the origin and freaks out a bit trying to get it.  When green, the hulls are not colliding.
+  The first shows two cubes depicting the classical edge-edge intersection, and progressing through to the other side, edge cases were discoverd with this visualization.  The second animation shows the capsule test, strange that it works.
+  When colliding, they are red, and the simplex, in yellow, contains the origin.  As they separate, the simplex loses hold of the origin and freaks out a bit trying to get it.  When green, the hulls are not colliding.
   ![animated cube test](https://github.com/zettix/gjkj/blob/master/resources/cube-edge-test1.gif)
   ![animated collision test](https://github.com/zettix/gjkj/blob/master/resources/collision_test_icecream.gif)
 
