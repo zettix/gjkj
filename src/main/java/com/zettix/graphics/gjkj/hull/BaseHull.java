@@ -15,12 +15,8 @@ import java.util.Vector;
  */
 public class BaseHull implements Hull {
     // private final Logger LOG = Logger.getLogger(BoxHull.class.getName());
-    public M4 worldTransform = new M4().Identity();
-    public M4 objectTransform = new M4().Identity();
-
     protected Vector<V3> worldCorners = new Vector<>();
     protected Vector<V3> objectCorners = new Vector<>();
-
 
     @Override
     public void TransformObjectSpace(M4 m) {
@@ -39,7 +35,6 @@ public class BaseHull implements Hull {
             worldCorners.add(result);
         }
     }
-
 
     @Override
     public V3 Support(V3 direction) {

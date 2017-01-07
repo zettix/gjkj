@@ -127,7 +127,7 @@ public class GJKIntersectTest {
     public void testRotatingBlocks() {
         // The bad boy.  two cubes, rotated so only their edges are intersecting.
         // A bunch so in theory only an arc will intersect. we can set this point.
-        boolean animate = true;
+        boolean animate = false;
         for (double theta = -6.5; theta < 6.5; theta += .3) {
             LOG.warning("Testing rotating blocks: " + theta);
             V3 pointy = new V3(2.0, 2.0, 2.0);
@@ -214,7 +214,11 @@ public class GJKIntersectTest {
                 if (theta > 2.0) {
                     result = true;
                 }
-                LOG.warning(a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + OpenScadAxes());
+            }
+            if (true) {
+                String foo = a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + OpenScadAxes();
+                LOG.warning("\n" + foo);
+                WriteFile("capsule_" + theta + ".scad", foo);
             }
             Assert.assertTrue(result);
         }
