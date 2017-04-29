@@ -6,6 +6,8 @@ import com.zettix.graphics.gjkj.util.vecstuff;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -27,8 +29,8 @@ public class Simplex {
     private static final double CLOSE = 0.0000001;
     private static Logger LOG = Logger.getLogger(Simplex.class.getName());
     public boolean intersecting = false;
-    protected ArrayList<V3> vertices = new ArrayList<>();
-    protected HashSet<V3> seen = new HashSet<>();
+    protected List<V3> vertices = new ArrayList<>();
+    protected Set<V3> seen = new HashSet<>();
     private Hull hull;
     private Double epsilon = 0.0000001;
 
@@ -48,7 +50,7 @@ public class Simplex {
         this.epsilon = epsilon;
     }
 
-    boolean SeenMe(V3 in) {
+    private boolean SeenMe(V3 in) {
         boolean seen_it = seen.contains(in);
         if (seen_it) {
             // LOG.warning("Already Saw This One!!!!!!!!!!!!!!!!" + in + " SIMPLEX FAILURE ABORT ABORT ABORT!" + seen);
@@ -406,9 +408,9 @@ public class Simplex {
       sb.append("Simplex[");
       sb.append(vertices.size());
       sb.append("] ");
-      for (int i = 0; i < vertices.size(); i++) {
+      for (V3 vert : vertices) {
         sb.append("[");
-        sb.append(vertices.get(i));
+        sb.append(vert);
         sb.append("]");
       }
       sb.append("]>");

@@ -13,9 +13,9 @@ public class vecstuff {
 
     public static V3 cross(V3 v1, V3 v2) {
         V3 f = new V3();
-        f.set(0, v1.get(1) * v2.get(2) - v1.get(2) * v2.get(1));
-        f.set(1, v2.get(0) * v1.get(2) - v2.get(2) * v1.get(0));
-        f.set(2, v1.get(0) * v2.get(1) - v1.get(1) * v2.get(0));
+        f.coords[0] = v1.coords[1] * v2.coords[2] - v1.coords[2] * v2.coords[1];
+        f.coords[1] = v2.coords[0] * v1.coords[2] - v2.coords[2] * v1.coords[0];
+        f.coords[2] = v1.coords[0] * v2.coords[1] - v1.coords[1] * v2.coords[0];
         return f;
     }
     /**
@@ -27,18 +27,18 @@ public class vecstuff {
      * @return the dot product of v1 and v2
      */
     public static Double dot(final V3 v1, final V3 v2) {
-        return (v1.get(0) * v2.get(0) +  v1.get(1) * v2.get(1)  + v1.get(2) * v2.get(2));
+        return (v1.coords[0] * v2.coords[0] +  v1.coords[1] * v2.coords[1]  + v1.coords[2] * v2.coords[2]);
     }
 
     public static Double distanceSquared(final V3 v1, final V3 v2) {
-        Double xx = v1.get(0) - v2.get(0);
-        Double yy = v1.get(1) - v2.get(1);
-        Double zz = v1.get(2) - v2.get(2);
+        Double xx = v1.coords[0] - v2.coords[0];
+        Double yy = v1.coords[1] - v2.coords[1];
+        Double zz = v1.coords[2] - v2.coords[2];
         return (xx * xx + yy * yy + zz * zz);
     }
 
     public static V3 add(final V3 v1, final V3 v2) {
-        return new V3(v1.get(0) + v2.get(0), v1.get(1) + v2.get(1), v1.get(2) + v2.get(2));
+        return new V3(v1.coords[0] + v2.coords[0], v1.coords[1] + v2.coords[1], v1.coords[2] + v2.coords[2]);
     }
 
     public static boolean HitOrigin(final V3 start, final V3 direction) {
@@ -46,9 +46,9 @@ public class vecstuff {
         //
         // p = t * direction + start.  p should be zero, 0=<t<=1
         // therefore 0 = t * dir + start
-        double d1 = direction.get(0);
-        double d2 = direction.get(1);
-        double d3 = direction.get(2);
+        double d1 = direction.coords[0];
+        double d2 = direction.coords[1];
+        double d3 = direction.coords[2];
         d1 *= d1;
         d2 *= d2;
         d3 *= d3;
@@ -57,35 +57,35 @@ public class vecstuff {
         double div = 1.0;
 
         if (d1 > max) {
-            t = -start.get(0);
-            div = direction.get(0);
+            t = -start.coords[0];
+            div = direction.coords[0];
             max = d1;
         }
         if (d2 > max) {
-            t = -start.get(1);
-            div = direction.get(1);
+            t = -start.coords[1];
+            div = direction.coords[1];
             max = d2;
         }
         if (d3 > max) {
-            t = -start.get(2);
-            div = direction.get(2);
+            t = -start.coords[2];
+            div = direction.coords[2];
         }
         t /= div;
         if ((t > 1.0001) || (t <= -0.0001)) {
             if (false) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Origin not on :(");
-                sb.append(start.get(0));
+                sb.append(start.coords[0]);
                 sb.append(",");
-                sb.append(start.get(1));
+                sb.append(start.coords[1]);
                 sb.append(",");
-                sb.append(start.get(2));
+                sb.append(start.coords[2]);
                 sb.append(") : (");
-                sb.append(direction.get(0));
+                sb.append(direction.coords[0]);
                 sb.append(",");
-                sb.append(direction.get(1));
+                sb.append(direction.coords[1]);
                 sb.append(",");
-                sb.append(direction.get(2));
+                sb.append(direction.coords[2]);
                 sb.append(") T: ");
                 sb.append(t);
                 LOG.warning(sb.toString());
