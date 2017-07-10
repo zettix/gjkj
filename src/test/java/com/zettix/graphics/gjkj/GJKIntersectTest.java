@@ -27,7 +27,7 @@ public class GJKIntersectTest {
         V3 pointy = new V3(2.0, 2.0, 2.0);
         a_hull = new TetHull(pointy);
         b_hull = new BoxHull(pointy);
-        M4 identity = new M4().Identity();
+        M4 identity = new M4().identity();
         a_hull.TransformWorldSpace(identity);
         b_hull.TransformWorldSpace(identity);
     }
@@ -45,15 +45,17 @@ public class GJKIntersectTest {
 
     @Test
     public void testIntersectMove1() throws Exception {
-        M4 mover = new M4().Identity().Move(1.0, 1.0, 1.0);
+        M4 mover = new M4().identity().move(1.0, 1.0, 1.0);
+        LOG.info("testIntersectMover MOVER: " + mover);
         a_hull.TransformWorldSpace(mover);
+        LOG.info("a_hull: " + a_hull);
         boolean result = new GJKIntersect(a_hull, b_hull).Intersect();
         Assert.assertTrue(result);
     }
 
     @Test
     public void testIntersectMove2() throws Exception {
-        M4 mover = new M4().Identity().Move(3.0, 3.0, 3.0);
+        M4 mover = new M4().identity().move(3.0, 3.0, 3.0);
         a_hull.TransformWorldSpace(mover);
         boolean result = new GJKIntersect(a_hull, b_hull).Intersect();
         Assert.assertFalse(result);
@@ -63,7 +65,7 @@ public class GJKIntersectTest {
     public void testIntersectMove3() throws Exception {
         Double f45 = Math.PI / 4.0;
         // This one is the real deal, rotate a cube and have edges cross...
-        M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(f45, 0.0, f45);
+        M4 mover = new M4().identity().move(-1.0, -1.0, -1.0).rotate(f45, 0.0, f45);
         b_hull.TransformWorldSpace(mover);
         GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
         boolean result = gjk.Intersect();
@@ -78,7 +80,7 @@ public class GJKIntersectTest {
     @Test
     public void testIntersectMove4() throws Exception {
         // This one is the real deal, rotate a cube and have edges cross...
-        M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(f45, 0.0, f45).Move(-1.8, -1.8, -1.8);
+        M4 mover = new M4().identity().move(-1.0, -1.0, -1.0).rotate(f45, 0.0, f45).move(-1.8, -1.8, -1.8);
         b_hull.TransformWorldSpace(mover);
         LOG.warning("BHULL: " + b_hull);
         LOG.warning(b_hull.toOpenScad("B", false));
@@ -95,29 +97,32 @@ public class GJKIntersectTest {
         double theta = -4.700000000000001;
 
         LOG.warning("Testing POSITIONED blocks: " + theta);
-        //M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, 0.0, f45 + theta);
-        //M4 a_mover = new M4(mover.Move(0.0, 1            LOG.warning("Testing rotating blocks: " + theta);
+        //M4 mover = new M4().identity().move(-1.0, -1.0, -1.0).rotate(0.0, 0.0, f45 + theta);
+        //M4 a_mover = new M4(mover.move(0.0, 1            LOG.warning("Testing rotating blocks: " + theta);
             V3 pointy = new V3(2.0, 2.0, 2.0);
             a_hull = new BoxHull(pointy);
             b_hull = new BoxHull(pointy);
-            //M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, 0.0, f45 + theta);
-            //M4 a_mover = new M4(mover.Move(0.0, 12.0,  .0));
-            // M4 mover = new M4().Identity().Move(12.0, .0, .0).Rotate(0.0, 0.0, f45 + theta);
-        M4 mover = new M4().Identity().Move(0.0, 12.0 - theta, .0).Rotate(0.0, 0.0, f45).Scale(2.0, 2.0, 2.0);
-            M4 a_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
+            //M4 mover = new M4().identity().move(-1.0, -1.0, -1.0).rotate(0.0, 0.0, f45 + theta);
+            //M4 a_mover = new M4(mover.move(0.0, 12.0,  .0));
+            // M4 mover = new M4().identity().move(12.0, .0, .0).rotate(0.0, 0.0, f45 + theta);
+        M4 mover = new M4().identity().move(0.0, 12.0 - theta, .0).rotate(0.0, 0.0, f45).scale(2.0, 2.0, 2.0);
+            M4 a_mover = new M4(mover.move(-1.0, -1.0,  -1.0));
 
-            //mover = mover.Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, f45, 0.0);
-            //M4 b_mover = new M4(mover.Move(0.0, 12.0, .0));
-        mover = new M4().Identity().Move(0.0, 12.0, .0).Rotate(f45, 0.0, 0.0).Scale(2.0, 2.0, 2.0);
-            M4 b_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
+            //mover = mover.identity().move(-1.0, -1.0, -1.0).rotate(0.0, f45, 0.0);
+            //M4 b_mover = new M4(mover.move(0.0, 12.0, .0));
+        mover = new M4().identity().move(0.0, 12.0, .0).rotate(f45, 0.0, 0.0).scale(2.0, 2.0, 2.0);
+            M4 b_mover = new M4(mover.move(-1.0, -1.0,  -1.0));
 
         b_hull.TransformWorldSpace(b_mover);
         a_hull.TransformWorldSpace(a_mover);
 
-            GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
-            boolean result = gjk.Intersect();
-        String foo = a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") + b_hull.toOpenScad("B", result) + OpenScadAxes();
+        GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
+        LOG.info("A HULL " + a_hull);
+        LOG.info("B HULL " + b_hull);
+        boolean result = gjk.Intersect();
         if (false) {
+            String foo = a_hull.toOpenScad("A", result) + gjk.simplex.toOpenScad("simplex") +
+                                           b_hull.toOpenScad("B", result) + OpenScadAxes();
             WriteFile("capsule_" + theta + ".scad", foo);
         }
         Assert.assertTrue(result);
@@ -127,22 +132,24 @@ public class GJKIntersectTest {
     public void testRotatingBlocks() {
         // The bad boy.  two cubes, rotated so only their edges are intersecting.
         // A bunch so in theory only an arc will intersect. we can set this point.
-        boolean animate = false;
-        for (double theta = -6.5; theta < 6.5; theta += .3) {
+        final boolean animate = false;
+        for (double theta = 6.5; theta > - 6.5; theta -= .3) {
             LOG.warning("Testing rotating blocks: " + theta);
             V3 pointy = new V3(2.0, 2.0, 2.0);
             a_hull = new BoxHull(pointy);
             b_hull = new BoxHull(pointy);
-            //M4 mover = new M4().Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, 0.0, f45 + theta);
-            //M4 a_mover = new M4(mover.Move(0.0, 12.0,  .0));
-            // M4 mover = new M4().Identity().Move(12.0, .0, .0).Rotate(0.0, 0.0, f45 + theta);
-            M4 mover = new M4().Identity().Move(0.0, 12.0 - theta, .0).Rotate(0.0, 0.0, f45).Scale(2.0, 2.0, 2.0);
-            M4 a_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
+            //M4 mover = new M4().identity().move(-1.0, -1.0, -1.0).rotate(0.0, 0.0, f45 + theta);
+            //M4 a_mover = new M4(mover.move(0.0, 12.0,  .0));
+            // M4 mover = new M4().identity().move(12.0, .0, .0).rotate(0.0, 0.0, f45 + theta);
+            M4 mover = new M4().identity().move(0.0, 12.0 - theta, .0).rotate(0.0, 0.0, f45).scale(2.0, 2.0, 2.0);
+            M4 a_mover = new M4(mover.move(-1.0, -1.0,  -1.0));
 
-            //mover = mover.Identity().Move(-1.0, -1.0, -1.0).Rotate(0.0, f45, 0.0);
-            //M4 b_mover = new M4(mover.Move(0.0, 12.0, .0));
-            mover = new M4().Identity().Move(0.0, 12.0, .0).Rotate(f45, 0.0, 0.0).Scale(2.0, 2.0, 2.0);
-            M4 b_mover = new M4(mover.Move(-1.0, -1.0,  -1.0));
+            //mover = mover.identity().move(-1.0, -1.0, -1.0).rotate(0.0, f45, 0.0);
+            //M4 b_mover = new M4(mover.move(0.0, 12.0, .0));
+            mover = new M4().identity().move(0.0, 12.0, .0).rotate(f45, 0.0, 0.0).scale(2.0, 2.0, 2.0);
+            M4 b_mover = new M4(mover.move(-1.0, -1.0,  -1.0));
+            LOG.warning("a mover:" + a_mover);
+            LOG.warning("b mover:" + b_mover);
 
             b_hull.TransformWorldSpace(b_mover);
             a_hull.TransformWorldSpace(a_mover);
@@ -152,7 +159,7 @@ public class GJKIntersectTest {
 
             if (!result) {
                 LOG.warning("SIMPLEX MODEL: " + theta);
-                if (theta > 0.33 && theta < 0.33) {
+                if (theta < -5.75 || theta > 5.75) {
                     result = true;
                 }
             }
@@ -174,7 +181,7 @@ public class GJKIntersectTest {
             a_hull = new SphereHull();
             b_hull = new SphereHull();
 
-            M4 mover = new M4().Identity().Move(theta, 0.0, 0.0);
+            M4 mover = new M4().identity().move(theta, 0.0, 0.0);
             b_hull.TransformWorldSpace(mover);
             SphereHull ss = (SphereHull) b_hull;
             GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
@@ -196,16 +203,16 @@ public class GJKIntersectTest {
         V3 dims = new V3(6.0, 1.1, 1.1);
         a_hull = new BoxHull(dims);
         b_hull = new BoxHull(dims);
-        M4 mover = new M4().Identity().Move(-3.0, -0.6, -0.6);
+        M4 mover = new M4().identity().move(-3.0, -0.6, -0.6);
         a_hull.TransformObjectSpace(mover);
         b_hull.TransformObjectSpace(mover);
         // Centered now.
-        a_hull.TransformWorldSpace(new M4().Identity());
+        a_hull.TransformWorldSpace(new M4().identity());
 
         for (double theta = 0.0; theta < 3.0; theta += 0.2) {
             // As in the javascript  this.hitbox_geo = new THREE.BoxGeometry(6, 1.1, 1.1);
             //hitbox.position.x = -1.0;
-            mover = new M4().Identity().Move(theta, 0.0, 0.0);
+            mover = new M4().identity().move(theta, 0.0, 0.0);
             b_hull.TransformWorldSpace(mover);
             GJKIntersect gjk = new GJKIntersect(a_hull, b_hull);
             boolean result = gjk.Intersect();
@@ -280,8 +287,8 @@ public class GJKIntersectTest {
             b_cap.setC1(new V3(-3.0, 0.0, 0.0));
             b_cap.setC2(new V3(6.0, 0.0, 0.0));
 
-            M4 a_mover = new M4().Identity().Move(0.0, 12.0, -1.0);
-            M4 b_mover = new M4().Identity().Move(-1.0, theta + 12.0, 0.0);
+            M4 a_mover = new M4().identity().move(0.0, 12.0, -1.0);
+            M4 b_mover = new M4().identity().move(-1.0, theta + 12.0, 0.0);
             b_cap.TransformWorldSpace(b_mover);
             a_cap.TransformWorldSpace(a_mover);
             GJKIntersect gjk = new GJKIntersect(a_cap, b_cap);

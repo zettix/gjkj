@@ -3,6 +3,9 @@ package com.zettix.graphics.gjkj.hull;
 import com.zettix.graphics.gjkj.util.V3;
 import com.zettix.graphics.gjkj.util.vecstuff;
 
+import java.util.logging.Logger;
+// import java.util.logging.L//
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,9 @@ import java.util.Map;
 public class BoxHull extends BaseHull implements Hull {
     // private final Logger LOG = Logger.getLogger(BoxHull.class.getName());
 
+
+    private final Logger LOGGER = Logger.getLogger(BoxHull.class.getName());
+
     public BoxHull() throws Exception{
         throw new Exception("No empty boxes!");
     }
@@ -31,7 +37,7 @@ public class BoxHull extends BaseHull implements Hull {
         for (int ix = 0; ix < 2; ix++) {
             for (int iy = 0; iy < 2; iy++) {
                 for (int iz = 0; iz < 2; iz++) {
-                    V3 p = new V3(ix * dimensions.get(0), iy * dimensions.get(1), iz * dimensions.get(2));
+                    V3 p = new V3(ix * dimensions.coords[0], iy * dimensions.coords[1], iz * dimensions.coords[2]);
                     objectCorners.add(p);
                     corner_index++;
                 }
@@ -45,30 +51,30 @@ public class BoxHull extends BaseHull implements Hull {
         // Return max(dot(corners[], direction)
         // Also note that hill climbing would be an optimization.
         // TODO(sean): Add hill climbing with edge and corner graph.
-        int max_i = 0;
-        Double maxdot = vecstuff.dot(direction, worldCorners.get(0));
+        V3 max_v = null;
+        Double maxdot = -Double.MAX_VALUE;
         Double tmpdot;
-        for (int i = 1; i < worldCorners.size(); i++) {
-            tmpdot = vecstuff.dot(direction, worldCorners.get(i));
+        assert worldCorners != null : "World Corners Can Not Be Null!!";
+        assert worldCorners.size() != 0 : "World Must Have Coreners!";
+        LOGGER.warning("WORLD CORMERS" + worldCorners);
+        for (V3 corner : worldCorners) {
+            //falsfalseeLOGGER.warning("ZZZZZZZZZZZZZZZZZZZZZZZ corener:" + max_v);
+            tmpdot = vecstuff.dot(direction, corner);
             if (tmpdot > maxdot) {
                 maxdot = tmpdot;
-                max_i = i;
+                max_v = corner;
             }
         }
-        V3 result = worldCorners.get(max_i);
-        // LOG.warning("Support box [Direction: " + direction + "] corner: " + result);
-        //LOG.warning(toString());
-        return result;
+        //LOGGER.warning("Support [dir:" + direction + "] corner: " + max_v);
+        assert max_v != null : "MAX_V IS NULL???";
+        return max_v;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
-            sb.append("Box: [");
-            sb.append(worldCorners.get(i));
-            sb.append("]\n");
-        }
+        sb.append("Box ");
+        sb.append(super.toString());
         return sb.toString();
     }
 

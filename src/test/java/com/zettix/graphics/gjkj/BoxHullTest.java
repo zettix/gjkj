@@ -6,7 +6,8 @@ import com.zettix.graphics.gjkj.util.V3;
 import com.zettix.graphics.gjkj.util.vecstuff;
 import org.testng.Assert;
 
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -20,7 +21,7 @@ public class BoxHullTest {
     @org.testng.annotations.Test
     public void testSupport() throws Exception {
         BoxHull boxHull;
-        Vector<V3> vv = new Vector<>();
+        List<V3> vv = new ArrayList<>();
         Double a = 0.0;
         Double b = 0.0;
         Double c = 0.0;
@@ -53,11 +54,14 @@ public class BoxHullTest {
             f.set(a, b, c);
             vv.add(f);
             boxHull = new BoxHull(f);
+            M4 m4 = new M4().identity();
+            boxHull.TransformWorldSpace(m4);
             V3 result = boxHull.Support(direction);
             Double d = vecstuff.distanceSquared(result, expected);
             LOG.warning("box:" + boxHull);
             LOG.warning("Input to box: " + f);
-            Assert.assertTrue(d < 0.0001, "Distance: " + d + "is bad! res: " + result + "Expect: " + expected + " )))");
+            Assert.assertTrue(d < 0.0001, "Distance: " + d + "is bad! res: " +
+                              result + "Expect: " + expected + " )))");
         }
         //boxHull = BoxHull();
     }
@@ -67,7 +71,7 @@ public class BoxHullTest {
         LOG.info("testApplyTransform.");
         V3 v3 = new V3(10.0, 11.0, 12.0);
         BoxHull boxHull = new BoxHull(v3);
-        M4 m4 = new M4().Identity().Move(1.0, 2.0, 3.0);
+        M4 m4 = new M4().identity().move(1.0, 2.0, 3.0);
         boxHull.TransformWorldSpace(m4);
         V3 expected = new V3(1.0, 13.0, 3.0);
         V3 direction = new V3(-1.0, 1.0, -1.0);

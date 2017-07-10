@@ -86,8 +86,8 @@ public class CapsuleHull extends BaseHull implements Hull {
     @Override
     public void TransformWorldSpace(M4 m) {
         // TODO(sean): need local and global centers so we can call TransformWorldSpace over and over like the other hulls.
-        c1 = m.Transform(c1);
-        c2 = m.Transform(c2);
+        c1 = m.transform(c1);
+        c2 = m.transform(c2);
         Init();
     }
 

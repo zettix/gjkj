@@ -46,7 +46,7 @@ public class SphereHull extends BaseHull implements Hull {
 
     @Override
     public void TransformWorldSpace(M4 m) {
-        center = m.Transform(center);
+        center = m.transform(center);
     }
 
     @Override

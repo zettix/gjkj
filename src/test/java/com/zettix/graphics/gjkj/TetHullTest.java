@@ -1,6 +1,7 @@
 package com.zettix.graphics.gjkj;
 
 import com.zettix.graphics.gjkj.hull.TetHull;
+import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
 import com.zettix.graphics.gjkj.util.vecstuff;
 import org.testng.Assert;
@@ -16,6 +17,8 @@ public class TetHullTest {
         TetHull tetHull = new TetHull(new V3(1.0, 1.0, 1.0));
         V3 expected = new V3(0.0, 0.0, 0.0);
         V3 direction = new V3(-1.0, -1.0, -1.0);
+        M4 noop = new M4().identity();
+        tetHull.TransformWorldSpace(noop);
         V3 result = tetHull.Support(direction);
         Assert.assertTrue(vecstuff.distanceSquared(result, expected) < 0.00001);
 

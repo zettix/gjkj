@@ -10,16 +10,16 @@ import com.zettix.graphics.gjkj.util.V3;
  */
 public class TetHull extends BaseHull implements Hull {
     // private final Logger LOG = Logger.getLogger(TetHull.class.getName());
-    public M4 transform = new M4().Identity();
+    public M4 transform = new M4().identity();
 
     /**
      * @param in Vector to create [0,0,0] [x,0,0] [0,y,0] [0, 0, z] tetrahedron.
      */
     public TetHull(V3 in) {
         objectCorners.add(new V3(0.0, 0.0, 0.0));
-        objectCorners.add(new V3(in.get(0), 0.0, 0.0));
-        objectCorners.add(new V3(0.0, in.get(1), 0.0));
-        objectCorners.add(new V3(0.0, 0.0, in.get(2)));
+        objectCorners.add(new V3(in.coords[0], 0.0, 0.0));
+        objectCorners.add(new V3(0.0, in.coords[1], 0.0));
+        objectCorners.add(new V3(0.0, 0.0, in.coords[2]));
         // LOG.warning("TET!!!!: " + this.toString());
         // LOG.warning("TET SIZE: " + corners.size());
     }

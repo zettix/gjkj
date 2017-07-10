@@ -25,11 +25,11 @@ public class M4Test {
 
     @org.testng.annotations.Test
     public void testSet() throws Exception {
-        M4 m1 = new M4().Identity();
+        M4 m1 = new M4().identity();
         M4 m2 = new M4();
-        m2.Set(m1);
+        m2.set(m1);
         for (int i = 0; i < 16; i++) {
-            Assert.assertEquals(m2.get(i), m1.get(i), "Item " + i + "different");
+            Assert.assertEquals(m2.matrix[i], m1.matrix[i], "Item " + i + "different");
         }
 
     }
@@ -40,8 +40,8 @@ public class M4Test {
         LOG.error("Test Move!!!");
         V3 expected = new V3(11.0, 102.0, 1003.0);
         V3 start = new V3(1.0, 2.0, 3.0);
-        M4 m = new M4().Identity().Move(10.0, 100.0, 1000.0);
-        V3 result = m.Transform(start);
+        M4 m = new M4().identity().move(10.0, 100.0, 1000.0);
+        V3 result = m.transform(start);
         LOG.error("Result: " + result);
         LOG.error("Expect: " + expected);
         Double d = vecstuff.distanceSquared(result, expected);
@@ -59,13 +59,13 @@ public class M4Test {
                 0.0, 0.0, 1.0, 0.0,
                 0.0, 0.0, 0.0, 1.0};
         M4 m = new M4();
-        m.Identity();
+        m.identity();
         M4 n = new M4();
-        n.Identity();
-        m.Multiply(n);
+        n.identity();
+        m.multiply(n);
         for (int i = 0; i < 16; i++) {
             LOG.info("Asserting element " + i);
-            Assert.assertEquals(expected[i], m.get(i));
+            Assert.assertEquals(expected[i], m.matrix[i]);
         }
     }
 
@@ -79,12 +79,12 @@ public class M4Test {
                 0.0, 0.0, 1.0, 0.0,
                 0.0, 0.0, 0.0, 1.0};
         M4 m = new M4();
-        m.Identity();
+        m.identity();
         M4 mm = new M4(m);
-        m.Multiply(mm);
+        m.multiply(mm);
         for (int i = 0; i < 16; i++) {
             LOG.info("Asserting element " + i);
-            Assert.assertEquals(expected[i], m.get(i), "Element: " + i);
+            Assert.assertEquals(expected[i], m.matrix[i], "Element: " + i);
         }
     }
 
@@ -92,8 +92,8 @@ public class M4Test {
     public void testRotate() {
         V3 x = new V3(1.0, 0.0, 0.0);
         V3 z = new V3(0.0, 0.0, 1.0);
-        M4 rot = new M4().Identity().Rotate(0.0, Math.PI / 2.0, 0.0);
-        V3 res = rot.Transform(x);
+        M4 rot = new M4().identity().rotate(0.0, Math.PI / 2.0, 0.0);
+        V3 res = rot.transform(x);
         Assert.assertTrue(vecstuff.distanceSquared(res, z) < 0.001);
     }
 
@@ -101,8 +101,8 @@ public class M4Test {
     public void testScale() {
         V3 x = new V3(1.0, 2.0, 3.0);
         V3 z = new V3(-1.0, 20.0, -15.0);
-        M4 rot = new M4().Identity().Scale(-1.0, 10.0, -5.0);
-        V3 res = rot.Transform(x);
+        M4 rot = new M4().identity().scale(-1.0, 10.0, -5.0);
+        V3 res = rot.transform(x);
         Assert.assertTrue(vecstuff.distanceSquared(res, z) < 0.001);
     }
 }

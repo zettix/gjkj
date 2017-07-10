@@ -5,7 +5,9 @@ import com.zettix.graphics.gjkj.util.V3;
 import com.zettix.graphics.gjkj.util.vecstuff;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -27,8 +29,8 @@ public class Simplex {
     private static final double CLOSE = 0.0000001;
     private static Logger LOG = Logger.getLogger(Simplex.class.getName());
     public boolean intersecting = false;
-    protected ArrayList<V3> vertices = new ArrayList<>();
-    protected HashSet<V3> seen = new HashSet<>();
+    protected List<V3> vertices = new ArrayList<>();
+    protected Map<String, V3> seen = new HashMap<>();
     private Hull hull;
     private Double epsilon = 0.0000001;
 
@@ -48,17 +50,21 @@ public class Simplex {
         this.epsilon = epsilon;
     }
 
-    boolean SeenMe(V3 in) {
-        boolean seen_it = seen.contains(in);
+    protected boolean SeenMe(V3 in) {
+        String inHash = in.hash();
+        boolean seen_it = seen.containsKey(inHash);
         if (seen_it) {
+            seen_it = in.equals(seen.get(inHash)); // double check.
             // LOG.warning("Already Saw This One!!!!!!!!!!!!!!!!" + in + " SIMPLEX FAILURE ABORT ABORT ABORT!" + seen);
         }
-        if (vecstuff.distanceSquared(in, ZERO) < CLOSE) {
-            intersecting = true;
-            // LOG.warning("A was actually close to the origin!");
-            return false;
+        if (!seen_it) {
+            if (vecstuff.distanceSquared(in, ZERO) < CLOSE) {
+                intersecting = true;
+                // LOG.warning("A was actually close to the origin!");
+                return false;
+            }
         }
-        return seen.contains(in);
+        return seen_it;
     }
 
     public boolean ContainsOrigin() {
@@ -155,7 +161,7 @@ public class Simplex {
            LOG.warning("This should never happen.  I've seen this guy.");
              return false;
         }
-        seen.add(c);
+        seen.put(c.hash(), c);
         vertices.add(c);
         return true;
     }
@@ -406,9 +412,9 @@ public class Simplex {
       sb.append("Simplex[");
       sb.append(vertices.size());
       sb.append("] ");
-      for (int i = 0; i < vertices.size(); i++) {
+      for (V3 vert : vertices) {
         sb.append("[");
-        sb.append(vertices.get(i));
+        sb.append(vert);
         sb.append("]");
       }
       sb.append("]>");
