@@ -38,7 +38,19 @@ public class SimplexTest {
 
     @Test
     public void testSeenMe() throws Exception {
-
+        V3 v1 = new V3(1.9999999999999998, 0.5431457505076196, -2.0);
+        V3 v2 = new V3(1.9999999999999998, 3.3715728752538094, 4.82842712474619);
+        V3 v3 = new V3(1.9999999999999998, 0.5431457505076196, -2.0);
+        V3 size = new V3(12.0, 12.0, 12.0);
+        Hull hull = new TetHull(size);
+        // hulls don't have world coords until you do a TransformWorldSpace(m4), once.
+        hull.TransformWorldSpace(new M4().identity());
+        Simplex simplex = new Simplex(hull);
+        Assert.assertFalse(simplex.SeenMe(v1));
+        simplex.seen.put(v1.hash(), v1);
+        Assert.assertFalse(simplex.SeenMe(v2));
+        simplex.seen.put(v2.hash(), v2);
+        Assert.assertTrue(simplex.SeenMe(v3));
     }
 
     @Test
@@ -75,7 +87,7 @@ public class SimplexTest {
         for (int i = 0; i < 3; i++) {
             V3 corner = hull.GetCorner(i);
             simplex.vertices.add(corner);
-            simplex.seen.add(corner);
+            simplex.seen.put(corner.hash(), corner);
         }
         LOG.warning("SIMPLEX: " + simplex);
         LOG.warning("YYYYYYYYYYYYYYYY About to TEST YYYYYYYYYYYYYYY");

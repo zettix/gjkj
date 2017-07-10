@@ -159,7 +159,7 @@ public class GJKIntersectTest {
 
             if (!result) {
                 LOG.warning("SIMPLEX MODEL: " + theta);
-                if (theta > 0.33 && theta < 0.33) {
+                if (theta < -5.75 || theta > 5.75) {
                     result = true;
                 }
             }

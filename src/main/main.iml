@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="TEST">
+    <orderEntry type="module-library" exported="" scope="TEST">
       <library name="testng">
         <CLASSES>
           <root url="jar://$APPLICATION_HOME_DIR$/plugins/testng/lib/testng.jar!/" />
