@@ -10,6 +10,8 @@ import java.util.Arrays;
  * Created by seanbrennan on 11/9/16.
  */
 public class V3 {
+    public static final double EPSILON = 0.0000001;
+
     public double[]  coords = new double[3];
 
     public V3() {
@@ -29,6 +31,18 @@ public class V3 {
         coords[1] = y;
         coords[2] = z;
         return this;
+    }
+
+    public boolean equals(final V3 other) {
+        double d = vecstuff.distanceSquared(this,other);
+        if (d < V3.EPSILON) {
+           return true;
+        }
+        return false;
+    };
+
+    public String hash() {
+        return String.format("%3.2f-%3.2f%3.2f", coords[0], coords[1], coords[2]);
     }
 
     public V3 ScalarMultiply(Double f) {
