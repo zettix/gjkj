@@ -2,7 +2,7 @@ package com.zettix.graphics.gjkj.hull;
 
 import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
-import com.zettix.graphics.gjkj.util.vecstuff;
+import com.zettix.graphics.gjkj.util.vecutil;
 
 /**
  * While sphere to sphere collison detection is extremely fast, GJK allows mixing hulls. e.g. sphere v.s. capsule.
@@ -36,8 +36,8 @@ public class SphereHull extends BaseHull implements Hull {
     @Override
     public V3 Support(V3 direction) {
         V3 far = new V3(direction);
-        far.ScalarMultiply(radius / Math.sqrt(vecstuff.dot(direction, direction)));
-        return vecstuff.add(center, far);
+        far.ScalarMultiply(radius / Math.sqrt(vecutil.dot_unsafe(direction, direction)));
+        return vecutil.add(center, far);
     }
 
     public V3 GetCorner(int index) {

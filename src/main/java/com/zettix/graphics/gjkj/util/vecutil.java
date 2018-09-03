@@ -1,17 +1,19 @@
 package com.zettix.graphics.gjkj.util;
 
 /*
- * This is an ad-hoc vector library with dot product, cross product, and a few others.
+ * This is an ad-hoc vector library with dot_unsafe product, cross_unsafe product, and a few others.
  *
  * Created by seanbrennan on 11/8/16.
  */
 
 import java.util.logging.Logger;
 
-public class vecstuff {
-    public static final Logger LOG = Logger.getLogger(vecstuff.class.getName());
+public final class vecutil {
+    public static final Logger LOG = Logger.getLogger(vecutil.class.getName());
 
-    public static V3 cross(V3 v1, V3 v2) {
+    private vecutil(){};  // Use static methods only.
+
+    public static V3 cross_unsafe(V3 v1, V3 v2) {
         V3 f = new V3();
         f.coords[0] = v1.coords[1] * v2.coords[2] - v1.coords[2] * v2.coords[1];
         f.coords[1] = v2.coords[0] * v1.coords[2] - v2.coords[2] * v1.coords[0];
@@ -19,14 +21,13 @@ public class vecstuff {
         return f;
     }
     /**
-     * Computes the dot product of v1 and v2.
-    *
-     * Actually |v1||v2|cosine(v1, v2), so really expect normalized vectors.
+     * Computes |v1||v2|coseine(v1, v2), safe for normilazed vectors only.
+     *
      * @param v1 first vector
      * @param v2 second vector
-     * @return the dot product of v1 and v2
+     * @return the dot_unsafe product of v1 and v2
      */
-    public static Double dot(final V3 v1, final V3 v2) {
+    public static Double dot_unsafe(final V3 v1, final V3 v2) {
         return (v1.coords[0] * v2.coords[0] +  v1.coords[1] * v2.coords[1]  + v1.coords[2] * v2.coords[2]);
     }
 
@@ -39,6 +40,13 @@ public class vecstuff {
 
     public static V3 add(final V3 v1, final V3 v2) {
         return new V3(v1.coords[0] + v2.coords[0], v1.coords[1] + v2.coords[1], v1.coords[2] + v2.coords[2]);
+    }
+
+    public static V3 unitize(final V3 v1) {
+        double len2 = dot_unsafe(v1, v1);
+        assert (len2 >= 0.0);
+        double lenx = 1.0 / Math.sqrt(len2);
+        return new V3(v1.coords[0] * (lenx), v1.coords[1] * (lenx), v1.coords[2] * (lenx));
     }
 
     public static boolean HitOrigin(final V3 start, final V3 direction) {
@@ -92,7 +100,7 @@ public class vecstuff {
             }
             return false;
         }
-        V3 testPoint = vecstuff.add(new V3(direction).ScalarMultiply(t), start);
-        return vecstuff.dot(testPoint, testPoint) <= 0.0001;
+        V3 testPoint = vecutil.add(new V3(direction).ScalarMultiply(t), start);
+        return vecutil.dot_unsafe(testPoint, testPoint) <= 0.0001;
     }
 }

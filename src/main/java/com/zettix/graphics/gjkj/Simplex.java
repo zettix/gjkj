@@ -2,7 +2,7 @@ package com.zettix.graphics.gjkj;
 
 import com.zettix.graphics.gjkj.hull.Hull;
 import com.zettix.graphics.gjkj.util.V3;
-import com.zettix.graphics.gjkj.util.vecstuff;
+import com.zettix.graphics.gjkj.util.vecutil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class Simplex {
             // LOG.warning("Already Saw This One!!!!!!!!!!!!!!!!" + in + " SIMPLEX FAILURE ABORT ABORT ABORT!" + seen);
         }
         if (!seen_it) {
-            if (vecstuff.distanceSquared(in, ZERO) < CLOSE) {
+            if (vecutil.distanceSquared(in, ZERO) < CLOSE) {
                 intersecting = true;
                 // LOG.warning("A was actually close to the origin!");
                 return false;
@@ -131,11 +131,11 @@ public class Simplex {
         V3 a = vertices.get(1);
         V3 a0 = new V3(a).ScalarMultiply(-1.0);  // 0 - a (from origin to a)
         V3 b = vertices.get(0);
-        V3 ab = vecstuff.add(b, a0);  // b - a: ab (from a to b)
-        Double ab_a0 = vecstuff.dot(ab, a0);
-        // Test is ab dot a0, to see if 0 is on left of a.
+        V3 ab = vecutil.add(b, a0);  // b - a: ab (from a to b)
+        Double ab_a0 = vecutil.dot_unsafe(ab, a0);
+        // Test is ab dot_unsafe a0, to see if 0 is on left of a.
         if (ab_a0 > 0.0) {
-            V3 direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
+            V3 direction = vecutil.cross_unsafe(vecutil.cross_unsafe(ab, a0), ab);
             return AddCheck(a, ab, direction);
         }
         // a is closest so go in direction of 0.
@@ -144,7 +144,7 @@ public class Simplex {
     }
 
     public boolean OriginOnLineCheck(V3 start, V3 direction) {
-        if (vecstuff.HitOrigin(start, direction)) {
+        if (vecutil.HitOrigin(start, direction)) {
             intersecting = true;
             return true;
         }
@@ -197,11 +197,11 @@ public class Simplex {
         V3 c = vertices.get(0);
         V3 direction;
         V3 a0 = new V3(a).ScalarMultiply(-1.0);
-        V3 ab = vecstuff.add(b, a0);
-        V3 ac = vecstuff.add(c, a0);
-        V3 abc = vecstuff.cross(ab, ac);
+        V3 ab = vecutil.add(b, a0);
+        V3 ac = vecutil.add(c, a0);
+        V3 abc = vecutil.cross_unsafe(ab, ac);
         // abc points straight out of the triangle.
-        double abcXac = vecstuff.dot(vecstuff.cross(abc, ac), a0);
+        double abcXac = vecutil.dot_unsafe(vecutil.cross_unsafe(abc, ac), a0);
         if (abcXac * abcXac < epsilon) {
             // promote to simplex.
             // LOG.warning("abcXac weak");
@@ -213,7 +213,7 @@ public class Simplex {
             return AddCheck(a, ab, a0);  // origin not on AC, promote.
         }
         if (abcXac > 0.0) {
-            double acDa0 = vecstuff.dot(ac, a0);
+            double acDa0 = vecutil.dot_unsafe(ac, a0);
             if (acDa0 * acDa0 < epsilon) {
                 // In origin in plane of AC perpendicular to triangle
                 // just promote to simplex.
@@ -224,14 +224,14 @@ public class Simplex {
             // 1 closest to AC:
             // [A, C] : supp->ACxA0xAC
             vertices.remove(1);
-            direction = vecstuff.cross(vecstuff.cross(ac, a0), ac);
+            direction = vecutil.cross_unsafe(vecutil.cross_unsafe(ac, a0), ac);
                 // LOG.warning("AC won");
               return AddCheck(a, ab, direction);
           } else {
-            if (vecstuff.dot(ab, a0) > 0.0) {  // STAR FACTOR
+            if (vecutil.dot_unsafe(ab, a0) > 0.0) {  // STAR FACTOR
                // 4  [A, B] supp->ABxA0xAB
                vertices.remove(0);
-               direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
+               direction = vecutil.cross_unsafe(vecutil.cross_unsafe(ab, a0), ab);
                 // LOG.warning("Aba0 won");
                 return AddCheck(a, ab, direction);
             } else {
@@ -245,11 +245,11 @@ public class Simplex {
             }
           }
         } else {
-            if (vecstuff.dot(vecstuff.cross(ab, abc), a0) > 0.0) {
-                if (vecstuff.dot(ab, a0) > 0.0) {  // STAR FACTOR
+            if (vecutil.dot_unsafe(vecutil.cross_unsafe(ab, abc), a0) > 0.0) {
+                if (vecutil.dot_unsafe(ab, a0) > 0.0) {  // STAR FACTOR
                     // 4  [A, B] supp->ABxA0xAB
                     vertices.remove(0);
-                    direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
+                    direction = vecutil.cross_unsafe(vecutil.cross_unsafe(ab, a0), ab);
                     // LOG.warning("AB won");
                     return AddCheck(a, ab, direction);
                 } else {
@@ -262,7 +262,7 @@ public class Simplex {
                     return AddCheck(a, ab, direction);
                 }
             } else {
-                double abcDa0 = vecstuff.dot(abc, a0);
+                double abcDa0 = vecutil.dot_unsafe(abc, a0);
                 if (abcDa0 * abcDa0 < epsilon) {
                     // in the plane of ABC and inside AB and AC, so in triangle.
                     //LOG.warning("In the TRIANGLE!!!!!");
@@ -320,16 +320,16 @@ public class Simplex {
         V3 d = vertices.get(0);
         V3 direction;
         V3 a0 = new V3(a).ScalarMultiply(-1.0);
-        V3 ab = vecstuff.add(b, a0);
-        V3 ac = vecstuff.add(c, a0);
-        V3 ad = vecstuff.add(d, a0);
+        V3 ab = vecutil.add(b, a0);
+        V3 ac = vecutil.add(c, a0);
+        V3 ad = vecutil.add(d, a0);
         // All that to make these three:
-        V3 abc = vecstuff.cross(ab, ac);
-        V3 acd = vecstuff.cross(ac, ad);
-        V3 adb = vecstuff.cross(ad, ab);
-        boolean over_abc = vecstuff.dot(abc, a0) > 0.0;
-        boolean over_acd = vecstuff.dot(acd, a0) > 0.0;
-        boolean over_adb = vecstuff.dot(adb, a0) > 0.0;
+        V3 abc = vecutil.cross_unsafe(ab, ac);
+        V3 acd = vecutil.cross_unsafe(ac, ad);
+        V3 adb = vecutil.cross_unsafe(ad, ab);
+        boolean over_abc = vecutil.dot_unsafe(abc, a0) > 0.0;
+        boolean over_acd = vecutil.dot_unsafe(acd, a0) > 0.0;
+        boolean over_adb = vecutil.dot_unsafe(adb, a0) > 0.0;
         // ABC | ACD | ADB
         // LOG.warning("ZZZZ TET ideas: " + over_abc + over_acd + over_adb + " ]]]");
         // LOG.warning("ZZZZ TET a:" + a + " b:" + b + " c:" + c + " d:" + d);
@@ -350,7 +350,7 @@ public class Simplex {
                     // [ABCD]-> [AC] -> see above.
                     vertices.remove(2); // b
                vertices.remove(0); // d
-                    direction = vecstuff.cross(vecstuff.cross(ac, a0), ac);
+                    direction = vecutil.cross_unsafe(vecutil.cross_unsafe(ac, a0), ac);
                     return AddCheck(a, ab, direction);
             }
           } else {
@@ -359,7 +359,7 @@ public class Simplex {
                     // [AB] -> see above/
                     vertices.remove(1); // c
                vertices.remove(0); // d
-                    direction = vecstuff.cross(vecstuff.cross(ab, a0), ab);
+                    direction = vecutil.cross_unsafe(vecutil.cross_unsafe(ab, a0), ab);
                     return AddCheck(a, ab, direction);
             } else {        // 1xx
               // 1 over ABC.
@@ -376,7 +376,7 @@ public class Simplex {
               // [AD] -> see above
                vertices.remove(2); // b
                vertices.remove(1); // c
-               direction = vecstuff.cross(vecstuff.cross(ad, a0), ad);
+               direction = vecutil.cross_unsafe(vecutil.cross_unsafe(ad, a0), ad);
                     return AddCheck(a, ab, direction);
             } else {        // x2x
                     // 2 over ACD
