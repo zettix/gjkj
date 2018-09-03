@@ -3,7 +3,7 @@ package com.zettix.graphics.gjkj;
 import com.zettix.graphics.gjkj.hull.TetHull;
 import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
-import com.zettix.graphics.gjkj.util.vecstuff;
+import com.zettix.graphics.gjkj.util.vecutil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -20,23 +20,23 @@ public class TetHullTest {
         M4 noop = new M4().identity();
         tetHull.TransformWorldSpace(noop);
         V3 result = tetHull.Support(direction);
-        Assert.assertTrue(vecstuff.distanceSquared(result, expected) < 0.00001);
+        Assert.assertTrue(vecutil.distanceSquared(result, expected) < 0.00001);
 
         expected = new V3(1.0, 0.0, 0.0);
         direction = new V3(1.0, .10, -.10);
         result = tetHull.Support(direction);
-        Assert.assertTrue(vecstuff.distanceSquared(result, expected) < 0.00001, "too far...");
+        Assert.assertTrue(vecutil.distanceSquared(result, expected) < 0.00001, "too far...");
 
         expected = new V3(0.0, 1.0, 0.0);
         direction = new V3(0.1f, 1.0, -.10);
         result = tetHull.Support(direction);
-        Assert.assertTrue(vecstuff.distanceSquared(result, expected) < 0.00001, "too far...");
+        Assert.assertTrue(vecutil.distanceSquared(result, expected) < 0.00001, "too far...");
 
 
         expected = new V3(0.0, 0.0, 1.0);
         direction = new V3(0.1f, -.10, 1.0);
         result = tetHull.Support(direction);
-        Assert.assertTrue(vecstuff.distanceSquared(result, expected) < 0.00001, "too far...");
+        Assert.assertTrue(vecutil.distanceSquared(result, expected) < 0.00001, "too far...");
 
     }
 }

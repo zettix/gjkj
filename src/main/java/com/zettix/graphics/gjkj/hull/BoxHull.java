@@ -1,7 +1,7 @@
 package com.zettix.graphics.gjkj.hull;
 
 import com.zettix.graphics.gjkj.util.V3;
-import com.zettix.graphics.gjkj.util.vecstuff;
+import com.zettix.graphics.gjkj.util.vecutil;
 
 import java.util.logging.Logger;
 // import java.util.logging.L//
@@ -48,7 +48,7 @@ public class BoxHull extends BaseHull implements Hull {
     @Override
     public V3 Support(V3 direction) {
         // Assume unsorted, no caching.
-        // Return max(dot(corners[], direction)
+        // Return max(dot_unsafe(corners[], direction)
         // Also note that hill climbing would be an optimization.
         // TODO(sean): Add hill climbing with edge and corner graph.
         V3 max_v = null;
@@ -59,7 +59,7 @@ public class BoxHull extends BaseHull implements Hull {
         LOGGER.warning("WORLD CORMERS" + worldCorners);
         for (V3 corner : worldCorners) {
             //falsfalseeLOGGER.warning("ZZZZZZZZZZZZZZZZZZZZZZZ corener:" + max_v);
-            tmpdot = vecstuff.dot(direction, corner);
+            tmpdot = vecutil.dot_unsafe(direction, corner);
             if (tmpdot > maxdot) {
                 maxdot = tmpdot;
                 max_v = corner;

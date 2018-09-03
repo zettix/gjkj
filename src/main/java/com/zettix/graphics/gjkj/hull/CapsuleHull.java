@@ -2,7 +2,7 @@ package com.zettix.graphics.gjkj.hull;
 
 import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
-import com.zettix.graphics.gjkj.util.vecstuff;
+import com.zettix.graphics.gjkj.util.vecutil;
 
 /**
  * Capsule Hull
@@ -64,19 +64,19 @@ public class CapsuleHull extends BaseHull implements Hull {
     }
 
     private void Init() {
-        from_c1_to_c2 = vecstuff.add(c2, new V3(c1).ScalarMultiply(-1.0));
+        from_c1_to_c2 = vecutil.add(c2, new V3(c1).ScalarMultiply(-1.0));
     }
 
     @Override
     public V3 Support(V3 direction) {
         V3 far = new V3(direction);
-        // This is wrong.  If r1 != r2 the dot should be to the angle of the cone.  Cannot get direction w/o unitizing....
-        if (vecstuff.dot(direction, from_c1_to_c2) > 0.0) {
-            far.ScalarMultiply(r2 / Math.sqrt(vecstuff.dot(direction, direction)));
-            return vecstuff.add(c2, far);
+        // This is wrong.  If r1 != r2 the dot_unsafe should be to the angle of the cone.  Cannot get direction w/o unitizing....
+        if (vecutil.dot_unsafe(direction, from_c1_to_c2) > 0.0) {
+            far.ScalarMultiply(r2 / Math.sqrt(vecutil.dot_unsafe(direction, direction)));
+            return vecutil.add(c2, far);
         }
-        far.ScalarMultiply(r1 / Math.sqrt(vecstuff.dot(direction, direction)));
-        return vecstuff.add(c1, far);
+        far.ScalarMultiply(r1 / Math.sqrt(vecutil.dot_unsafe(direction, direction)));
+        return vecutil.add(c1, far);
     }
 
     public V3 GetCorner(int index) {

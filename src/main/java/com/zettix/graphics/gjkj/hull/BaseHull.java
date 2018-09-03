@@ -2,7 +2,7 @@ package com.zettix.graphics.gjkj.hull;
 
 import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
-import com.zettix.graphics.gjkj.util.vecstuff;
+import com.zettix.graphics.gjkj.util.vecutil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +37,12 @@ public class BaseHull implements Hull {
 
     public V3 Support(V3 direction) {
         // Assume unsorted, no caching.
-        // Return max(dot(corners[], direction)
+        // Return max(dot_unsafe(corners[], direction)
         V3 max_v = null;
         Double maxdot = -Double.MAX_VALUE;
         Double tmpdot;
         for (V3 corner : worldCorners) {
-            tmpdot = vecstuff.dot(direction, corner);
+            tmpdot = vecutil.dot_unsafe(direction, corner);
             if (tmpdot > maxdot) {
                 maxdot = tmpdot;
                 max_v = corner;

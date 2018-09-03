@@ -2,7 +2,7 @@ package com.zettix.graphics.gjkj;
 
 import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
-import com.zettix.graphics.gjkj.util.vecstuff;
+import com.zettix.graphics.gjkj.util.vecutil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.log4testng.Logger;
@@ -44,9 +44,9 @@ public class M4Test {
         V3 result = m.transform(start);
         LOG.error("Result: " + result);
         LOG.error("Expect: " + expected);
-        Double d = vecstuff.distanceSquared(result, expected);
+        Double d = vecutil.distanceSquared(result, expected);
         LOG.error("Dist: " + d);
-        Assert.assertTrue(0.001f > vecstuff.distanceSquared(result, expected));
+        Assert.assertTrue(0.001f > vecutil.distanceSquared(result, expected));
     }
 
 
@@ -94,7 +94,7 @@ public class M4Test {
         V3 z = new V3(0.0, 0.0, 1.0);
         M4 rot = new M4().identity().rotate(0.0, Math.PI / 2.0, 0.0);
         V3 res = rot.transform(x);
-        Assert.assertTrue(vecstuff.distanceSquared(res, z) < 0.001);
+        Assert.assertTrue(vecutil.distanceSquared(res, z) < 0.001);
     }
 
     @Test
@@ -103,6 +103,6 @@ public class M4Test {
         V3 z = new V3(-1.0, 20.0, -15.0);
         M4 rot = new M4().identity().scale(-1.0, 10.0, -5.0);
         V3 res = rot.transform(x);
-        Assert.assertTrue(vecstuff.distanceSquared(res, z) < 0.001);
+        Assert.assertTrue(vecutil.distanceSquared(res, z) < 0.001);
     }
 }

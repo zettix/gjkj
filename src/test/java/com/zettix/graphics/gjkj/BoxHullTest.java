@@ -3,7 +3,7 @@ package com.zettix.graphics.gjkj;
 import com.zettix.graphics.gjkj.hull.BoxHull;
 import com.zettix.graphics.gjkj.util.M4;
 import com.zettix.graphics.gjkj.util.V3;
-import com.zettix.graphics.gjkj.util.vecstuff;
+import com.zettix.graphics.gjkj.util.vecutil;
 import org.testng.Assert;
 
 import java.util.List;
@@ -57,7 +57,7 @@ public class BoxHullTest {
             M4 m4 = new M4().identity();
             boxHull.TransformWorldSpace(m4);
             V3 result = boxHull.Support(direction);
-            Double d = vecstuff.distanceSquared(result, expected);
+            Double d = vecutil.distanceSquared(result, expected);
             LOG.warning("box:" + boxHull);
             LOG.warning("Input to box: " + f);
             Assert.assertTrue(d < 0.0001, "Distance: " + d + "is bad! res: " +
@@ -78,6 +78,6 @@ public class BoxHullTest {
         V3 result = boxHull.Support(direction);
                     LOG.warning("box:" + boxHull);
         LOG.info("Result: " + result);
-        Assert.assertTrue(vecstuff.distanceSquared(result, expected) < 0.001, "Distance too big.");
+        Assert.assertTrue(vecutil.distanceSquared(result, expected) < 0.001, "Distance too big.");
     }
 }

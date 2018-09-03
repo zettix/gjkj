@@ -34,7 +34,7 @@ public class V3 {
     }
 
     public boolean equals(final V3 other) {
-        double d = vecstuff.distanceSquared(this,other);
+        double d = vecutil.distanceSquared(this,other);
         if (d < V3.EPSILON) {
            return true;
         }
