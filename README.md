@@ -10,6 +10,8 @@ Casey Muratori's video presents a nice introduction to GJK:
 
 [![GJK Video](https://img.youtube.com/vi/Qupqu1xe7Io/0.jpg)](https://www.youtube.com/watch?v=Qupqu1xe7Io)
 
+Here is a link to the original paper: [https://graphics.stanford.edu/courses/cs448b-00-winter/papers/gilbert.pdf](https://graphics.stanford.edu/courses/cs448b-00-winter/papers/gilbert.pdf)
+
 It does not however solve the following bug: consider two identical spheres.   No simplex can be made so despite completely overlapping, GJK would fail.  One must consider potential issues when writing a solver, and do thorough testing.
 
 ## Top Bug Fixed: Origin inside 2-Simplex.
