@@ -6,6 +6,12 @@ GJK is the Gilbert Johnson Keerthi Collision Detection Algorithm.
 In short, a clever decomposition of the dot product to see if two
 convex hulls, when subtracted in a Minkowski Sum, contain the origin.
 
+Casey Muratori's video presents a nice introduction to GJK:
+
+[![GJK Video](https://img.youtube.com/vi/Qupqu1xe7Io/0.jpg)](https://www.youtube.com/watch?v=Qupqu1xe7Io)
+
+It does not however solve the following bug: consider two identical spheres.   No simplex can be made so despite completely overlapping, GJK would fail.  One must consider potential issues when writing a solver, and do thorough testing.
+
 ## Top Bug Fixed: Origin inside 2-Simplex.
 This highlights one numerical issue with GJK as I understand it.  When building the simplex, the base triangle contains the origin.  The dot product of the last triangle vertex to the origin and the normal to the triangle is zero, they being 90 degrees apart.  Numerical instability can mean your next direction is essentially random, up or down from the base triangle.
 There are other edge cases, like being in the plane of AC perpendicular to ABC, or any other edge, making the new support direction random, I'm testing for that now. To be honest I'm working in the dark here.  If you must detect if the triangle contains the origin, and by going directly toward the origin you more or less strive for that outcome, you have to test for this case.  After testing, it works.
